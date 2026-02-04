@@ -1,0 +1,920 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{minted}
+
+\geometry{a4paper, margin=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{React - start-kit for beginners}
+\lhead{Jakxel}
+\cfoot{\thepage}
+
+\newtheorem{definition}{Definición}[section]
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{example}{Ejemplo}[section]
+
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, const, continue, debugger, default, delete, do, else, export,
+    for, function, if, import, in, instanceof, let, new, return, super, switch, this,
+    throw, try, typeof, var, void, while, with, yield, await, async, class, extends},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={boolean, number, string, null, undefined, Array, Date, eval, function, hasOwnProperty, Infinity, isFinite, isNaN, isPrototypeOf, Math, NaN, Object, prototype, String, valueOf},
+  ndkeywordstyle=\color{teal}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]//,
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\begin{document}
+
+\title{React start-kit for beginners}
+\date{3-august-2026}
+\author{Islas Carreon Victor Jakxel}
+\maketitle
+
+\tableofcontents
+
+\newpage
+\section{React get started}
+\subsection{Introduction}
+\subsection*{Why I'm Doing This}
+
+When I first started learning React, I realized how hard it was to find good advice or simple guides to just get started with cool projects. Most of the time, I felt overwhelmed, and I wished someone had left a clear, beginner-friendly path to follow.
+
+Sure, nowadays AI can do a lot of things — maybe even faster and better than what I’m doing here... sometimes. But that’s not the point. I wanted to build something real on my own, step by step, and constantly improve my skills while doing it.
+
+I’m not an expert yet — I’m literally still learning as I write this. But I’m doing this so that other people (maybe just like me) can have a better experience getting started with React and web development in general. If I learn and you learn too, that’s a win-win situation — what more could we ask for?
+
+Also, don’t let AI do all the work for you. It might be fast, but often it gets things wrong. You can do better than that. Push yourself. Do the hard stuff. Study. Improve. Don’t settle for just “vibing” through your goals — work hard and stand out.
+
+Start doing things by yourself, like reading this or building something on your own. It doesn’t have to be perfect. Just start.
+\subsection{Start a project}
+I don’t know, but on different sites I’ve checked, they say it’s good to have a bit of experience or at least basic knowledge in HTML, CSS, and JavaScript. Maybe before starting with React, you should watch some videos about that.
+
+I recommend the videos from SuperSimpleDev — he has a really good pack of videos for learning those topics. Personally, those were the first videos I watched when I started learning web development, and I totally recommend them.
+
+\subsection*{How to start a project}
+First, you’ll need to set up your coding environment. In my case, I use \textbf{Neovim} as my editor, but you can use whatever you're comfortable with.
+Then, make sure you have \textbf{npm} installed. If you don’t have it yet... what are you doing? Just install it already! You’ll need it to create your project.
+Once you’ve got that ready, run this command to create a new project using Vite (I use Vite because it was the first thing I found and it just works):
+
+\begin{minted}{bash}
+npm create vite@latest name-of-your-project
+\end{minted}
+
+Then, follow the prompts — I usually choose React, but you can pick whatever you want depending on the type of project you're building.
+
+After that, go into your project folder, install dependencies, and start the dev server:
+
+\begin{minted}{bash}
+cd name-of-your-project
+npm install
+npm run dev
+\end{minted}
+
+And that’s it! Your project should be running locally — now you're ready to start building.
+
+\subsection{React environment}
+\subsection*{What are all this files?!!!}
+Usually, when I first started using React, my initial reaction was: “What is going on here?”  
+Just a moment ago I was used to working with a maximum of three files — \texttt{index.html}, \texttt{style.css}, and \texttt{script.js}. Suddenly, React throws a whole bunch of files at you and my brain couldn’t process it. I almost quit right there.
+
+But once you take the time to look around and understand things step by step, it’s actually pretty simple.
+
+Most of the important stuff happens in the \texttt{src} folder. That’s where your actual project lives. For now, that’s really the only folder you need to focus on.
+
+Inside \texttt{src}, you'll find two main files: \texttt{main.tsx} and \texttt{App.tsx}.  
+\begin{itemize}
+  \item \texttt{main.tsx} is where React is connected to the \texttt{index.html} file in the \texttt{public} folder — it basically tells React where to display your app.
+  \item \texttt{App.tsx} is where the main component of your app lives. Think of it like your starting point — the “home” of your React app.
+\end{itemize}
+
+Once you understand that, you’ll eventually want to create new folders like \texttt{components/} to organize reusable parts of your UI, or \texttt{pages/} if your app has multiple pages. You can also add folders like \texttt{styles/}, but don’t worry about that just yet.
+
+You’ll also see folders like \texttt{public/} and sometimes \texttt{assets/} — these are usually for things like images or static files. For now, they’re not super important.
+
+Now that you know what these files are for, you can move around the project more confidently and start building cool stuff!
+
+\subsection{React and ES6}
+
+While I was looking for good advice or methods to learn the first steps in React development, I realized something: it's surprisingly hard to find clear and helpful study guides. I'm not sure why, but a lot of tutorials out there either overcomplicate things or explain stuff you don’t really need when you're just starting out.
+
+That said, I did find some useful information in the W3Schools React tutorials. They cover a lot of topics — maybe too many — and honestly, some of them aren’t really necessary when you’re getting started. But one thing that really caught my attention was the section on ES6.
+
+If you're new to React, I think it’s a good idea to take a look at ES6. It introduces a lot of features that are used all the time in React code, Understanding these will make learning React way easier.
+
+\begin{definition}[React ES6]
+ES6 stands for \textbf{ECMAScript 6}.\\
+ECMAScript was created to standardize JavaScript, and ES6 is the 6\textsuperscript{th} version of it. It was officially published in 2015, and it's also known as \textbf{ECMAScript 2015}.
+\end{definition}
+\textbf{Why should learn ES6?}
+React uses ES6, and you should be familiar with some of the new feautures like:
+\begin{itemize}
+  \item Classes
+  \item Arrow Functions
+  \item Variables
+  \item Array methods
+  \item Desctructuring 
+  \item Modules
+  \item Temary operator
+  \item Spread Operator
+\end{itemize}
+
+\subsubsection{ES6 Classes}
+\begin{definition}[Class in react]
+  A class is a type of function, but instead of using teh keyword $function$ to initialize it, we used the keyword $class$, and the properties are assigned inside a $constructor$ method.
+\end{definition}
+
+\begin{example}
+  A simple class constructor
+  \begin{minted}{JavasCript}
+    class Car {
+      constructor(name) {
+        this.brand = name;
+      }
+    }
+    
+  \end{minted}
+\end{example}
+notice the case of the class name, We have begun the name $Car$, with an uppercase character. This is a standar naming convention for classes.
+\textbf{Now we can create objects using teh car class:}
+\begin{example}
+  Create an object called "mycar" bases on the car class
+  \begin{minted}{JavasCript}
+class Car {
+  constructor(name) {
+    this.brand = name;
+  }
+}
+const mycar = new Car("Ford");\end{minted} 
+\end{example}
+the constructor function is called automatically when the object is initialized.
+
+\subsubsection{Arrow functions}
+Arrow functions allow us to write shorter function sintax
+\begin{example}
+  before:
+  \begin{minted}{JavasCript}
+    hello = function () {
+      return "hello world!";
+    }
+  \end{minted}
+\end{example}
+\begin{example}
+  with arrow function:
+  \begin{minted}{JavasCript}
+    hello = () => {
+      return "hello World!";
+    }
+  \end{minted}
+\end{example}
+It gets shorter! if the function has only one statement, and the statement return a value, you can remove the brackets and the return keyworkd
+
+\textbf{Note:} this works only if the function has only one statement.
+If you have parameters, pass them inside the parentheses.
+\begin{example}
+  Arrow function with parameters
+  \begin{minted}{JavasCript}
+    hello = (val) => "hello" + val;
+  \end{minted}
+\end{example}
+\textbf{What about $this$?}
+The handling of $this$ is also different in arrow functions compared to regular functions.
+In short, with arrow functions there is no binding of $This$.
+In regular functions the $this$ keyword represented the object that called the function, which could be the window, the document, a button or whatever.
+With arrow functions, the $this$ keyword always represents the object that defined the arrow function.
+
+\subsubsection{Variables}
+Now with ES6, there are three ways of definiing your variables: $var$, $let$, and $const$.
+\begin{example}
+  var
+  \begin{minted}{JavasCript}
+    var x = 5.6;
+  \end{minted}
+\end{example}
+if you use $var$ outside a function, it belongs to the global scope.
+if youe use $var$ inside of a function, it belong to that function.
+if you use $var$ inside of a block, i.e. a for lool, the variable is still available outside of that block.
+$var$ has a fuction scope, not a block scope.
+
+\begin{example}
+  let
+  \begin{minted}{JavasCript}
+    let x = 5.6;
+  \end{minted}
+\end{example}
+$let$ is the block scoped version of $var$, and is  limited block (or expression) where it is defined. if you use $let$ inside a block, i.e. a for loop, the variable is only available inside that for loop.
+$let$ has a block scope.
+
+\begin{example}
+  const
+  \begin{minted}{JavasCript}
+    const x = 5.6;
+  \end{minted}
+\end{example}
+
+$const$ is a variable that once it has been created, its value can never change.
+$const$ has a block scope.
+It does not define a constants value. It defines a constants reference to a value.
+Because of this you can NOT:
+\begin{itemize}
+  \item Reassing a constant value
+  \item Reassing a constant Array
+  \item Reassing a constant object 
+\end{itemize}
+ but you CAN:
+ \begin{itemize}
+  \item Change the elements of a constant Array
+  \item Change the properties of a constant object
+ \end{itemize}
+
+ \subsubsection{Array Methods}
+ There a many JavasCript array methods. 
+ One of the most useful in react is the $.map()$ array method. 
+ The $.map()$ method allows you to run a function on each item in the array, returning a new array as the result. 
+ In react, $.map()$ can be used to generate list. 
+ \begin{example}
+   generate a list of items from an array
+   \begin{minted}{JavasCript}
+     const myArray = ['apple', 'banana', 'orange'];
+     const myList = myArray.map((item) => <p>{item}</p>)
+  \end{minted}
+ \end{example}
+ \subsubsection{Desctructuring}
+To illustrate destructuring, we'll make a sandwich. Do you take everything out of the refrigerator to make your sandwich? No, you only take out the items you would like to use on your sandwich.
+Destructuring is exactly the same. We may have an array or object that we are working with, but we only need some of the items contained in these.
+Destructuring makes it easy to extract only what is needed.
+
+\textbf{Destructuring Arrays}
+\begin{example}
+  destructuring
+  \begin{minted}{JavasCript}
+    const vehicles = ['mustang', 'f-150', 'expedition'];
+
+    const [car, truck, suv] = vehicles;
+  \end{minted}
+\end{example}
+When destructuring arrays, the order that variables are declared is important.
+If we only want the car and suv we can simply leave out the truck but keep the comma:
+\begin{example}
+  Only what we want
+  \begin{minted}{JavasCript}
+    const vehicles = ['mustang', 'f-150', 'expedition'];
+
+    const [car,, suv] = vehicles;
+  \end{minted}
+\end{example}
+\textbf{Destructuring objects}
+\begin{example}
+  Only what we want
+  \begin{minted}{JavasCript}
+  
+  const vehicleOne = {
+    brand: 'Ford',
+    model: 'Mustang',
+    type: 'car',
+    year: 2021, 
+    color: 'red',
+    registration: {
+      city: 'Houston',
+      state: 'Texas',
+      country: 'USA'
+    }
+  }
+
+  myVehicle(vehicleOne)
+
+  function myVehicle({ model, registration: { state } }) {
+    const message = 'My ' + model + ' is registered in ' + state + '.';
+  }
+
+  \end{minted}
+\end{example}
+
+\subsubsection{Spread Operator}
+The JavaScript spread operator $(...)$ allows us to quickly copy all or part of an existing array or object into another array or object. 
+\begin{example}
+  spread operator
+  \begin{minted}{JavaScript}
+    const numbersOne = [1,2,3];
+    const numbersTwo = [4,5,6];
+    const numbersCombined = [...numbersOne, ...numbersTwo];
+  \end{minted}
+\end{example}
+the spread operator is often used in combination with destructuring
+\begin{example}
+  Assing the first and second items from $numbers$ to variables and put the rest in an array
+  \begin{minted}{JavaScript}
+    const numbers = [1,2,3,4,5,6];
+    const [one, two, ...rest] = numbers;
+  \end{minted}
+\end{example}
+We can use the spread operator with objects too 
+\begin{example}
+  Combine thse two objects
+  \begin{minted}{JavaScript}
+   const myVehicle = {
+    brand: 'Ford',
+    model: 'Mustang',
+    color: 'red'
+  }
+
+  const updateMyVehicle = {
+    type: 'car',
+    year: 2021, 
+    color: 'yellow'
+  }
+
+  const myUpdatedVehicle = {...myVehicle, ...updateMyVehicle}
+  \end{minted}
+\end{example}
+
+\subsubsection{Modules}
+JavaScript modules allow you to break up your code into separate files.
+This makes it easier to maintain the code-base.
+ES Modules rely on the $import$ and $export$ statements.
+
+\textbf{Export}
+You can export a function or variable from any file.
+
+\textbf{Import}
+You can import modules into a file in two ways, based on if they are named exports or default exports.
+Named exports must be destructured using curly braces. Default exports do not.
+
+\begin{example}
+  import named exports from the file person.js
+  \begin{minted}{JavaScript}
+    export { name , age } from 'person.js';
+  \end{minted}
+\end{example}
+\begin{example}
+  import a default export from the file message.js
+  \begin{minted}{JavaScript}
+    import message from './message.js';
+  \end{minted}
+\end{example}
+
+\subsubsection{Ternary Operator}
+The ternary operator is simplified conditional operator like if / else. 
+Syntax: \textit{condition ? <expression if true> : <expression if false>}
+\begin{example}
+ Before:
+  \begin{minted}{JavaScript}
+  if (authenticated) {
+    renderApp();
+  } else {
+    renderLogin();
+  }
+  \end{minted}
+  Example using ternary operator:
+  \begin{minted}{JavaScript}
+    authenticated ? renderApp() : renderLogin();
+    minted
+  \end{minted}
+\end{example}
+
+\subsection{React Components}
+
+One of the most important features in React — and probably the main reason many beginner programmers start using it — is the concept of \textbf{components}.
+
+But... why components?
+
+\begin{definition}[React Components]
+A React component is an independent and reusable piece of code.  
+They serve the same purpose as JavaScript functions, but they work in isolation and return HTML (via JSX).
+\end{definition}
+
+\subsection*{Why Are They So Important?}
+
+In my experience, components help a lot with keeping your code clean, organized, and easier to scale.  
+Instead of having a huge file with all your HTML and logic, you can break your UI into smaller parts — each one focused on a specific task or section of the page.
+
+That makes your project easier to understand and maintain.
+
+\subsection*{How to Create a Component}
+
+There are two main ways to create a component: function components and class components.  
+Nowadays, function components are more common because they are simpler and work perfectly with React Hooks.
+
+Here’s a basic example of a functional component:
+
+\begin{minted}{jsx}
+function Greeting() {
+  return <h1>Hello from a component!</h1>;
+}
+\end{minted}
+
+To use it, just write:
+
+\begin{minted}{jsx}
+<Greeting />
+\end{minted}
+
+\subsection*{Components Inside Components}
+
+You can place one component inside another — that’s actually a common and powerful pattern in React.
+
+\begin{minted}{jsx}
+function App() {
+  return (
+    <div>
+      <Header />
+      <MainContent />
+      <Footer />
+    </div>
+  );
+}
+\end{minted}
+
+Each of those components (`Header`, `MainContent`, `Footer`) would be defined separately — either in the same file or, ideally, in their own files.
+
+\subsection*{Components in Files}
+
+As your app grows, it’s a good idea to create a folder called \texttt{components/} and organize each component into its own file.
+
+For example:
+
+\begin{verbatim}
+src/
+  App.tsx
+  components/
+    Header.tsx
+    MainContent.tsx
+    Footer.tsx
+\end{verbatim}
+
+Then, in your \texttt{App.tsx}, you can import them like this:
+
+\begin{minted}{jsx}
+import Header from './components/Header';
+import MainContent from './components/MainContent';
+import Footer from './components/Footer';
+\end{minted}
+
+This way, your code stays clean and modular — which is one of the biggest advantages of using React.
+
+\subsection{React JSX}
+Apart from the previous section, there's something else I found interesting and a bit helpful when trying to understand the basics of React — and that’s JSX.
+
+JSX might look confusing at first, especially if you're coming from regular HTML and JavaScript, but once you get the idea behind it, things start making a lot more sense. So let’s take a quick look at what JSX is and why it’s important.
+\begin{definition}[JSX]
+  JSX stand for JavaScript XML, this allow us to write HTML in React. and makes it easier to write and add HTML in react. 
+\end{definition}
+\subsection*{Coding JSX}
+JSX allows us to write HTML elements in JavaScript and place them in the DOM wihout any $createElement()$ and.or $appendChild()$ methods. 
+\textit{You are not required to use JSX, but JSX makes it easier to write React Applications. }
+
+\subsection*{Expressions in JSX}
+With JSX you can write expressions inside curly braces ${ }$. 
+The expression can be a React variable, or property, or any other valid JavaScript expression. JSX will execute the expression and return the result:
+\begin{example}
+  Execute the expresion $5 + 5$:
+  \begin{minted}{JavaScript}
+    const myElement = <h1>React is {5 + 5} times better with JSX</h1>;
+  \end{minted}
+\end{example}
+\subsection*{Inserting a Large block of HTML}
+To write HTML on multiple lines, put the HTML inside parentheses:
+\begin{example}
+  Create a list with three list items:
+  \begin{minted}{JavaScript}
+  const myElement = (
+    <ul>
+      <li>Apples</li>
+      <li>Bananas</li>
+      <li>Cherries</li>
+    </ul>
+  );
+  \end{minted}
+\end{example}
+
+\subsection*{One Top-Level Element}
+
+In React, the HTML must be wrapped in \textbf{one} top-level element.  
+So, if you want to write two paragraphs, you need to place them inside a parent element, like a \texttt{<div>}.
+
+Alternatively, you can use a \textbf{fragment} to wrap multiple elements. This helps avoid unnecessarily adding extra nodes to the DOM.  
+A fragment looks like an empty HTML tag: \texttt{<></>}.
+
+\begin{example}[One Top-Level Element]
+Wrap two paragraphs inside a \texttt{div} element:
+\begin{minted}{jsx}
+const myElement = (
+  <div>
+    <p>I am a paragraph.</p>
+    <p>I am a paragraph too.</p>
+  </div>
+);
+\end{minted}
+
+Wrap two paragraphs inside a fragment:
+\begin{minted}{jsx}
+const myElement = (
+  <>
+    <p>I am a paragraph.</p>
+    <p>I am a paragraph too.</p>
+  </>
+);
+\end{minted}
+\end{example}
+
+\subsection*{Attribute class = classname}
+The $class$ attribute is a much used attribute in HTML, but since JSX is rendered as JavaScript, and the $class$ keyword is a reserved word in JavaScript, you are not allowed to use it in JSX.
+\textit{Use attribute $className$ instead.}
+JSX solved this by using $className$ instead. When JSX is rendered, it translates $className$ attributes into $class$ attributes.
+\begin{example}
+  Using the attribute ClassName instead of class in JSX
+  \begin{minted}{JavaScript}
+  const myElement = <h1 className="myclass">Hello World</h1>;
+  \end{minted}
+\end{example}
+\subsection*{Conditions - if statements}
+React supports if statements, but not inside JSX.
+
+To be able to use conditional statements in JSX, you should put the if statements outside of the JSX, or you could use a ternary expression instead, wich one we alrady talk in ES6 section.
+
+\subsection{React Props}
+
+Another important topic in React is the use of \textbf{props}.
+
+Props are arguments passed into React components.  
+They are passed via HTML-like attributes and allow you to send data from a parent component to a child component.
+
+The word \textbf{props} stands for "properties" — basically, values that you can use inside a component to make it more dynamic and reusable.
+
+\subsection*{Using Props in React}
+
+Here’s a simple example to help you understand how props work:
+
+\begin{example}[React Props]
+A component that receives props:
+
+\begin{minted}{jsx}
+function Welcome(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+\end{minted}
+
+Using the component and passing a prop:
+
+\begin{minted}{jsx}
+<Welcome name="Jakxel" />
+\end{minted}
+\end{example}
+
+In this case, the \texttt{Welcome} component receives a prop called \texttt{name}, and it uses that value to display a custom message.
+You can pass as many props as you want, and even pass objects, arrays, or functions. Props are read-only, which means a component cannot change the props it receives — this helps keep your code predictable and easier to debug.
+Props are one of the most essential tools in React, especially when you're working with multiple components that need to share data.
+
+\subsection{React Events}
+
+In React, just like in the HTML DOM, you can perform actions based on user events.  
+Events are one of the main ways to create interaction and dynamic functionality in your project.
+
+React supports the same types of events as plain HTML — like \texttt{onClick}, \texttt{onChange}, \texttt{onMouseOver}, and many others.
+
+\subsection*{Adding Events}
+
+You can add an event to an element by using a camelCase syntax and passing a function:
+
+\begin{minted}{jsx}
+function MyButton() {
+  function handleClick() {
+    alert('Button clicked!');
+  }
+
+  return <button onClick={handleClick}>Click me</button>;
+}
+\end{minted}
+
+Notice how \texttt{onClick} is written in camelCase (not lowercase like in HTML), and you pass the function reference without calling it (no parentheses).
+
+\subsection*{Passing Arguments to Event Handlers}
+
+If you want to pass arguments to the function when the event happens, you can use an arrow function:
+
+\begin{minted}{jsx}
+<button onClick={() => handleClick('Jakxel')}>Greet</button>
+\end{minted}
+
+\begin{minted}{jsx}
+function handleClick(name) {
+  alert(`Hello, \${name}!`);
+}
+\end{minted}
+
+\subsection*{React Event Objects}
+
+React wraps the native browser event in its own synthetic event system for better performance and cross-browser compatibility.  
+You can access the event object like this:
+
+\begin{minted}{jsx}
+function handleInput(event) {
+  console.log(event.target.value);
+}
+
+<input type="text" onChange={handleInput} />
+\end{minted}
+
+This \texttt{event} object has all the properties you’d expect from a regular DOM event — like \texttt{target}, \texttt{type}, and more.
+
+---
+
+Using events in React is a fundamental part of building interactive interfaces. Whether it's clicking buttons, typing in inputs, or hovering over elements, React gives you powerful and simple tools to handle it all.
+\subsection{Conditionals in React}
+
+As we've seen before, you can use conditional statements in JSX to control what gets rendered. React supports different ways to handle conditions — like \texttt{if} statements, the ternary operator, and even the powerful \texttt{\&\&} operator.
+
+Each of these tools helps you decide what should be shown on the screen based on certain conditions (like a boolean state, user input, or data).
+
+\subsection*{Using \texttt{if} Statements}
+
+You can use a regular \texttt{if} statement outside of JSX (before the return) to decide what to render:
+
+\begin{minted}{jsx}
+function Greeting(props) {
+  if (props.isLoggedIn) {
+    return <h1>Welcome back!</h1>;
+  }
+  return <h1>Please log in.</h1>;
+}
+\end{minted}
+
+\subsection*{Using the Ternary Operator}
+
+This is useful for writing inline conditionals inside JSX:
+
+\begin{minted}{jsx}
+<h1>{isLoggedIn ? 'Welcome back!' : 'Please log in.'}</h1>
+\end{minted}
+
+\subsection*{Using the \texttt{\&\&} Operator}
+
+The \texttt{\&\&} operator is great for rendering something only if a condition is true. It's like saying: "If this is true, then do that."
+
+\begin{minted}{jsx}
+{isLoggedIn && <p>You are logged in.</p>}
+\end{minted}
+
+This works because if the condition before \texttt{\&\&} is false, React skips rendering the element on the right.
+
+\subsection*{Summary}
+
+- Use \texttt{if} for more complex logic outside JSX.
+- Use the \texttt{ternary operator} for inline “if-else” inside JSX.
+- Use \texttt{\&\&} when you only want to show something if a condition is true.
+
+Understanding these will help you make your components more dynamic and responsive to different states.
+ 
+\subsection{Routing in React}
+
+Routing is one of the fundamental topics when building a web project.  
+It allows you to navigate between different pages or views in your application — which is super useful when you're building things like a navbar, a dashboard, or any multi-page structure.
+
+In React, we usually handle routing using a library called \texttt{react-router-dom}.  
+This tool helps us create and manage routes easily, so we can display different components depending on the URL.
+
+\subsection*{Why is Routing Important?}
+
+Without routing, your entire app would just be one long page.  
+Routing helps you split your app into separate "pages" (even though technically they’re still part of a single-page app). This keeps everything organized and makes it feel like a real website.
+
+\subsection*{How to Set Up Routing}
+
+First, you need to install the routing package:
+
+\begin{minted}{bash}
+npm install react-router-dom
+\end{minted}
+
+Then, in your main file (usually \texttt{main.tsx} or \texttt{main.jsx}), wrap your app with the \texttt{BrowserRouter}:
+
+\begin{minted}{jsx}
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+\end{minted}
+
+\subsection*{Creating Routes}
+
+Inside your \texttt{App.tsx} (or \texttt{App.jsx}), define your routes like this:
+
+\begin{minted}{jsx}
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
+  );
+}
+\end{minted}
+
+Now, when the user visits \texttt{/}, they’ll see the \texttt{Home} component, and when they go to \texttt{/about}, they’ll see the \texttt{About} page.
+
+\subsection*{Using a Navbar}
+
+With routing set up, you can create a simple navbar like this:
+
+\begin{minted}{jsx}
+import { Link } from 'react-router-dom';
+
+function Navbar() {
+  return (
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+    </nav>
+  );
+}
+\end{minted}
+
+This lets users click links and navigate between pages without reloading the page — a key feature of single-page applications (SPAs).
+\subsection{React Hooks}
+\subsection*{What is a Hook?}
+Hooks allow function components to have acces to state and other react features, Because of this, class componentsare generally no longer needed 
+Althought Hooks generally replace class components, there are no plants to remove classes from React. 
+Hooks allows us to $"Hook"$ into react features such as state and lifecycle methods
+we must $import$ Hooks fro $react$. 
+\subsection*{Hook rules}
+There are 3 rules for hooks:
+\begin{itemize}
+  \item Hooks can only be called inside react function components
+  \item Hoos can only be called at the top level of a component 
+  \item Hooks cannot be a conditional
+\end{itemize}
+\textbf{Note:} Hooks will not work in React class components. 
+
+\section{useState}
+\subsection{State fundamentals}
+\begin{definition}[UseState Hook]
+  The useState hook is a fnctio9n that allows you to add state to a functional component. 
+\end{definition}
+UseState is an alternative to the usereducer hook that is preferred when we require the basic uptade. Is used to add the state variables in the components. FOr using the useState hook we have to inported it into he component. 
+\begin{minted}{JSX}
+  const [state, setState] =
+  useState(initialState)
+\end{minted}
+\begin{itemize}
+  \item \textbf{state:} It is he value of the current state 
+  \item \textbf{setState:} 
+  \item \textbf{initialState:} It is the initial value of the state. 
+\end{itemize}
+\subsection{How does useState() works?}
+\begin{enumerate}
+  \item \textbf{initialize State:} When you call usestate(initialvalue), it creates a state variable and an updater function. 
+    \begin{minted}{JSX}
+      const [count, setCount ] = useState(0);
+    \end{minted}
+  \item \textbf{State is preserved across renders:} react remembers the state value between re-renders of the component. 
+    Each time the component renders, react keeps the latest value of count. 
+  \item \textbf{State uptades with the  updater function:} When you call setCount(newValue) react updates the state and it re-renders the component to reflect the new state value. 
+    \begin{minted}{JSX}
+      <button onCLick={() => setCount(count+1)}>Increment</button>
+    \end{minted}
+  \item \textbf{Triggers Re-render:} react will re-render \textbf{only the component} where useState was used-ensuring you UI updates automatically when the state changes. 
+\end{enumerate}
+\subsection{When to use useState}
+Whe should use the state management solution. 
+\begin{itemize}
+  \item We need a simple state management solution. 
+  \item We component has state that changes over time. 
+  \item The state does not require complex updates or dependencies. 
+\end{itemize}
+
+\section{useEffect}
+The useEffect is one of the most commonly used hooks in react used to handle side effects in functional components. 
+\subsection{What is useEffect?}
+\begin{definition}[useEffect]
+  The useEffect is used to handle the side effects such as fetching data and updating DOM. 
+\end{definition}
+This hooks runs on every render but there is aslo a way of using a dependecy array using which we can control the effect of rendering. It can be used ti perform actions such as:
+\begin{itemize}
+  \item Fetching data from an API. 
+  \item Setting up event listeners of subscriptions. 
+  \item Manipulating the DOM directly( Althought react generally handles DOM manipulation for you)
+  \item Cleaning up resources when a component unmounts.
+\end{itemize}
+\begin{minted}{JSX}
+  Syntax
+  
+  useEffect(() => {
+    // code to run on each render 
+    return () => {
+      // cleanup function (optional)
+    };
+  }, [dependencies]);
+\end{minted}
+
+\begin{itemize}
+  \item \textbf{Effect function:} this is wehre your side effect code runs. 
+  \item \textbf{Cleanup functions:} This optional return function cleans up side effects like subscriptions or timers when the component unmounts. 
+  \item \textbf{dependeces array:} React re-runs the effect if any of the values in this array change. 
+\end{itemize}
+
+\subsection{how does it works?}
+\begin{itemize}
+  \item \textbf{Initial render happens: } react renders the component and updates the DOM. 
+  \item \textbf{useEffect after render: } It runs after the paint, not during render. 
+  \item \textbf{Dependecies are checked: } If there is no dependecy array, the effect runs after every render; if the array is empty([]), it runs once on mount; if dependencies are provided, it run sonly when those values change. 
+  \item \textbf{Cleanup function runs:} Before teh effect re-runs or the components unmountsm the clenaup function (returned from useEffect) is executed.
+  \item \textbf{Effect re-runs: } If dependencies changed, the effect runs again - after cleanup.
+\end{itemize}
+\subsection{Best practices for useEffect}
+Always provide a dependecy array: This helps React know when the effect shoul run. If you dont specify dependencies, it will run on every render. 
+\begin{itemize}
+  \item \textbf{Use multiple useEffect hooks for different concerns: } Split logic into separate effects to keep your code organized and readable. 
+  \item \textbf{Cleanup effects: }If your effect involves timers, subscriptions, or external resources, return a cleanup function to prevent memory leaks. 
+  \item \textbf{Avoid heavy logic inside useEffect: }Keep the logic inside useEffect simple. if needed, move complex logic into separate functions.
+\end{itemize}
+
+\textbf{Implement useEffect hook}
+\begin{minted}{JSX}
+import { useState, useEffect } from "react";
+
+function HookCounterOne() {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        document.title = `You clicked \${count} times`;
+    }, [count]);
+
+    return (
+        <div>
+            <button onClick={() => setCount((prevCount) => prevCount + 1)}>
+                Click {count} times{" "}
+            </button>
+        </div>
+    );
+}
+export default HookCounterOne;
+\end{minted}
+\textbf{In this example}
+\begin{itemize}
+  \item useEffect triggers a function on every component render, using react to execute specified task efficiently. 
+  \item Positioned within the component, it grants easy access to state and props without additional coding. 
+  \item for replicating lifecycle methods in functional components, copy and customize the provided code snippet according to your needs. 
+\end{itemize}
+
+\subsection{useEffect conclusion}
+The useEffect hook is a powerful tool in react for handling side effects in function components. By using useEffect, you can easily manage tasks like data fetching, subscribing to events, and cleaning up resources when a component unmounts. Its flexibility allows you to run effects after the component render, only when certain dependencies change, or once when the component mounts. 
+
+\section{useContext}
+In react applications, sometimes managing state across deeply nested components can become very difficult. The useContext hook offers a simple and efficient solution to share state between components without the need for prop drilling. 
+
+\subsection{What is useContext hook}
+
+The useContext hook in React allows components to consume values from the React context. React’s context API is primarily designed to pass data down the component tree without manually passing props at every level. useContext is a part of React's hooks system. 
+It help avoid the problem of "prop drilling" where props are passed down multiple levels for parent to child components. 
+
+\begin{itemize}
+  \item Simplies accessing shared state aracross components. 
+  \item Avoids prop drilling by eliminating the need to pass props down multiple levels. 
+  \item Works seamlessly with react context API to provide global state. 
+  \item Ideal for managing themes, authentication, or user preferences across the app. 
+\end{itemize}
+
+\textbf{Syntax}
+\begin{minted}{JSX}
+  const contextValue = userContext(myContext);
+\end{minted}
+\begin{itemize}
+  \item \textbf{MyContext: } The context object is created using react.createContext().
+  \item \textbf{contextValue: }The current context value that we can use in our component.
+\end{itemize}
+
+\section{Program Context}
+Here, after all this introduction of the basics and the main React hooks that I think everyone should know, I’m going to start a new project.
+I’m not sure yet how to continue trying to give advice or concepts about React, so I’ll try to share tips and ideas that come to mind during the process of building something simple. Hopefully, this can be helpful for you as well.
+
+So, let’s get started!
+I don’t have the full project planned yet, but I want to solve at least some problems I have. That’s why I’m going to create a project called GymTracker. As the name suggests, it will be a gym tracker to keep a log of my weight and other related data.
+
+I think this will be a good project to progressively add new concepts and features that might help both me and anyone reading this to learn along the way, let’s begin wooOOooOO!
+\end{document}

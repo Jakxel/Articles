@@ -1,0 +1,62 @@
+# === LaTeX build files ===
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.vrb
+*.xdv
+*.dvi
+*.ps
+
+# === Bibliography / indexing ===
+*.idx
+*.ilg
+*.ind
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+
+# === Temporary / editor files ===
+*~
+*.swp
+*.swo
+*.tmp
+.DS_Store
+
+# === LaTeX cache directories ===
+_latexmk/
+latex.out/
+build/
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# PDFs (generated output)
+*.pdf
+
+# Minted
+_minted*
+*.pyg
