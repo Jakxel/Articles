@@ -1,0 +1,160 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,english]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{lmodern}
+
+\geometry{margin=2.5cm}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    
+    \vspace*{2cm}
+    
+    {\Huge\bfseries Programming Paradigms \par}
+    
+    \vspace{1cm}
+    {\Large A Comparative Study \par}
+    
+    \vfill
+    
+    {\Large Victor Jakxel Islas Carreón \par}
+    {\large Student of Computer Systems Engineering \par}
+    {\large Instituto Tecnológico de Tijuana \par}
+    \vfill
+    {\large \today \par}
+\end{titlepage}
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction to Programming Paradigms}
+
+Programming paradigms are fundamental to the world of software development. Just as artists choose different styles and techniques to bring their ideas to life, programmers select paradigms to shape the structure, organization, and behavior of their code. 
+
+A programming paradigm is a high-level way to conceptualize and structure the implementation of a computer program. Programming languages can support one or multiple paradigms, each offering different tools, models, and abstractions for solving problems.
+
+Paradigms can be described along several dimensions. Some focus on the execution model—for example, whether a program allows side effects or whether the order of operations is strictly defined. Others emphasize code organization, such as grouping state and behavior together. Still others are distinguished by syntactic or grammatical structures encouraged by the language.
+
+\subsection{What is a Programming Paradigm?}
+
+A programming paradigm can be understood as a general methodology or approach for solving problems using a particular programming language. In other words, it provides a structured way to think about solutions and implement them using the language’s tools, abstractions, and constructs.
+
+Although there are many programming languages, each one usually aligns with one or more paradigms that influence how code is written, organized, and executed. These diverse methodologies exist because different problems, domains, and contexts require different ways of thinking about programs.
+
+\subsection{Importance in Computer Science}
+
+Understanding programming paradigms is essential for several reasons:
+
+\begin{itemize}
+    \item \textbf{Improved problem-solving skills:} Each paradigm offers a unique perspective on how to analyze and structure solutions, helping programmers think more flexibly and creatively.
+    \item \textbf{Better code readability and maintainability:} Choosing an appropriate paradigm for a specific task often results in cleaner, more modular, and easier-to-maintain code.
+    \item \textbf{Easier learning of new languages and frameworks:} Familiarity with multiple paradigms accelerates learning because many languages share underlying concepts even if their syntax differs.
+    \item \textbf{Enhanced communication and collaboration:} Understanding the paradigms used by a team improves technical discussions and supports more coherent design decisions.
+
+There is a classification of programming paradigms into two broad paradigms, Imperative and declarative.
+
+
+\end{itemize}
+
+\section{Imperative Paradigm}
+
+The imperative paradigm is a style of programming based on describing a sequence of instructions that modify the program's state step by step. In this approach, the programmer specifies \textit{how} a task should be performed by defining explicit commands that the computer executes in order. It is similar to following a detailed recipe, where each step must be carried out precisely to reach the final result.
+
+In imperative programming, the program's behavior is defined by its sequence of operations and the changes applied to variables and memory during execution. This paradigm encompasses several related but distinct subdomains, such as procedural, structured, modular, and object-oriented programming. These subdomains evolved from imperative programming to address specific challenges, but all remain rooted in the core idea of step-by-step state manipulation.
+
+\subsection{Characteristics}
+
+Imperative programming includes several key characteristics:
+
+\begin{itemize}
+    \item \textbf{Control Flow:} Programs are built using control structures such as conditionals, loops, assignments, and input/output operations.
+    \item \textbf{Conditional and Iterative Structures:} Loops like \texttt{for}, \texttt{while}, and \texttt{do-while} allow repeated execution of code blocks and control the flow of execution.
+    \item \textbf{Mutable State:} The program's state changes continuously as commands are executed. Variables can be updated multiple times throughout the program.
+    \item \textbf{Task Decomposition:} Programs are broken down into smaller steps or functions rather than focusing directly on the final result.
+\end{itemize}
+
+These characteristics are also present in subdomains of the imperative paradigm, including structured, procedural, modular, and object-oriented programming.
+
+\subsection{Advantages and Limitations}
+
+\textbf{Advantages:}
+\begin{itemize}
+    \item \textbf{Straightforward Logic:} Since execution follows a clear sequence of instructions, imperative programs are often easy to trace and understand.
+    \item \textbf{Full Control of Execution Order:} The programmer controls the exact order of operations, which can lead to optimized performance for certain tasks.
+    \item \textbf{Easier Debugging:} Programs are assembled from smaller tasks, making it easier to isolate and address bugs.
+    \item \textbf{Efficient Memory Usage:} Imperative languages often allow direct manipulation of memory, which can lead to efficient resource management.
+\end{itemize}
+
+\textbf{Limitations:}
+\begin{itemize}
+    \item \textbf{Increased Complexity in Large Programs:} Mutable state and complex control flow can make large codebases difficult to understand and maintain.
+    \item \textbf{Reduced Readability:} Long sequences of commands may become hard to follow, especially in systems that require extensive state manipulation.
+\end{itemize}
+
+\subsection{Examples}
+
+Many popular programming languages support the imperative paradigm, including C, C++, Java, Python, C\#, Ruby, MATLAB, and R. It is important to note that modern languages usually support multiple paradigms, and are not strictly imperative.
+
+Below are brief descriptions of several imperative sub-paradigms, which will be explored in more depth later:
+
+\begin{enumerate}
+    \item \textbf{Structured Programming}  
+    An extension of imperative programming that uses sequences, conditionals, and loops for clearer program structure. It avoids \texttt{goto} statements, resulting in more readable and maintainable code.
+
+    \item \textbf{Modular Programming}  
+    Focuses on dividing a program into reusable modules. While structured programming emphasizes control structures, modular programming emphasizes grouping functionality into independent, reusable units.
+
+    \item \textbf{Procedural Programming}  
+    Breaks the program into functions or procedures. It extends structured programming by making functions the main organizational unit. Unlike object-oriented programming, procedures dominate over data.
+
+    \item \textbf{Object-Oriented Programming (OOP)}  
+    Builds on imperative concepts by grouping data and functions into objects. OOP introduces abstraction, encapsulation, inheritance, and polymorphism. It enhances reusability and maintainability of code.
+\end{enumerate}
+
+\subsection{Conclusion}
+
+The imperative paradigm focuses on obtaining results through step-by-step commands that manipulate the program's state. Many widely used programming languages employ this model due to its clarity and control over program execution. Although modern programming often combines multiple paradigms, imperative concepts remain foundational and influence structured, procedural, modular, and object-oriented programming.
+
+\section{Object-Oriented Paradigm}
+\subsection{Characteristics}
+\subsection{Advantages and Limitations}
+\subsection{Examples}
+
+\section{Functional Paradigm}
+\subsection{Characteristics}
+\subsection{Advantages and Limitations}
+\subsection{Examples}
+
+\section{Logical Paradigm}
+\subsection{Characteristics}
+\subsection{Advantages and Limitations}
+\subsection{Examples}
+
+\section{Comparative Analysis of Paradigms}
+\subsection{Strengths of Each Paradigm}
+\subsection{Weaknesses of Each Paradigm}
+\subsection{Situational Use Cases}
+
+\section{Applications in Modern Software Development}
+\subsection{Web Development}
+\subsection{Mobile Applications}
+\subsection{Systems Programming}
+\subsection{Artificial Intelligence}
+
+\section{Conclusion}
+\subsection{Summary of Findings}
+\subsection{Final Remarks}
+\subsection{Future Perspectives}
+
+\section{References}
+https://en.wikipedia.org/wiki/Programming_paradigm
+https://www.geeksforgeeks.org/system-design/introduction-of-programming-paradigms/
+https://www.datacamp.com/blog/introduction-to-programming-paradigms
+https://www.geeksforgeeks.org/system-design/what-is-imperative-programming/
+
+\end{document}

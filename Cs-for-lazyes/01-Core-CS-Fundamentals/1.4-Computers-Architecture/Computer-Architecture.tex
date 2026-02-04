@@ -1,0 +1,1471 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{geometry}
+\usepackage{listings}
+
+\geometry{a4paper, margin=2.5cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Computers Architecture}
+\lhead{Islas Carreon Victor Jakxel}
+\cfoot{\thepage}
+
+\newtheorem{definition}{Definición}[section]
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{example}{Ejemplo}[section]
+
+\title{Computers Architecture}
+\author{Islas Carreon Victor Jakxel}
+\date{\today}
+\newpage
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Foundations and Scope of Computer Architecture}
+
+To begin with, computer architecture is the discipline concerned with the conceptual design and fundamental operational structure of computer systems. It defines the attributes of a computing system that are visible to the programmer, as well as the principles that govern the interaction between hardware and software. As such, computer architecture serves as a bridge between abstract computational models and their physical realization.
+
+This section talks about the conceptual scope of computer architecture, tries to clarify its distinction from related fields, and introduces the layered abstraction model that underpins modern computing systems. All of this is meant to be the first step into this article, before continuing into the real chaos and pain of the low-level world.
+
+\subsection{Definition of Computer Architecture vs Computer Organization vs Computer Engineering}
+
+For this discussion, there are three main concepts: computer architecture, computer organization, and computer engineering. They are closely related but distinct disciplines.
+
+\textit{Computer architecture} refers to the programmer-visible specification of a computer system. This includes the instruction set architecture (ISA), data types, registers, addressing modes, memory model, and input/output mechanisms. Architecture defines \emph{what} a computer does and how software interacts with hardware, without prescribing a specific hardware implementation.
+
+\textit{Computer organization} describes the internal operational units and their interconnections that implement the architectural specification. This includes datapaths, control units, pipelines, cache structures, and memory hierarchies. Organization focuses on \emph{how} architectural features are realized in hardware.
+
+\textit{Computer engineering} is a broader field that encompasses the design, development, and integration of computer systems at the electrical and physical level. It combines principles from electrical engineering and computer science, covering topics such as circuit design, semiconductor technology, embedded systems, and hardware--software co-design.
+
+In summary, computer architecture defines system behavior and the programmer interface, computer organization implements that definition, and computer engineering provides the physical means to construct the system.
+
+\subsection{Role of Computer Architecture in the Hardware--Software Interface}
+
+Computer architecture defines the hardware--software contract. Software relies on architectural guarantees such as instruction semantics, memory consistency models, and exception-handling behavior. Hardware implementations must faithfully execute software according to these specifications.
+
+This interface enables software portability across different implementations of the same architecture. For example, multiple microarchitectures may implement the same ISA. If you do not know what ISA means, it is simply the \emph{Instruction Set Architecture}, which defines the set of instructions that a processor can execute. These implementations may differ significantly in performance, power consumption, and internal complexity. This separation of concerns is a fundamental principle that enables long-term software compatibility and ecosystem stability.
+
+\subsection{Historical Evolution of Computer Architectures}
+
+Early computer systems were based on the von Neumann architecture, characterized by a single memory shared between instructions and data. While simple and flexible, this design introduced the von Neumann bottleneck, limiting performance due to shared memory bandwidth.
+
+Subsequent developments introduced Harvard and modified Harvard architectures, separating instruction and data paths to improve throughput. Advances in semiconductor technology enabled increasingly complex architectures, including pipelined processors, superscalar execution, and multicore systems.
+
+Modern computer architectures emphasize parallelism, memory hierarchy optimization, and energy efficiency, making it possible for you to spend all day watching reels or funny cat videos.
+
+\subsection{Design Goals and Constraints}
+
+The design of a computer architecture involves balancing multiple competing objectives:
+
+\begin{itemize}
+    \item \textbf{Performance}: maximizing instruction throughput and minimizing latency
+    \item \textbf{Power efficiency}: reducing energy consumption and heat dissipation
+    \item \textbf{Cost}: minimizing manufacturing and deployment expenses
+    \item \textbf{Reliability}: ensuring correct operation under faults and variability
+    \item \textbf{Scalability}: supporting future performance growth
+\end{itemize}
+
+Architectural decisions inevitably involve trade-offs among these factors, and no single design can optimize all objectives simultaneously.
+
+\subsection{Abstraction Layers in Computing Systems}
+
+Modern computing systems are organized as a hierarchy of abstraction layers. Each layer conceals lower-level complexity while exposing well-defined interfaces, enabling modular design, portability, and scalability across hardware and software platforms.
+
+\begin{itemize}
+    \item \textbf{High-Level Software Abstraction} \\
+    At the highest level, users interact with applications developed using high-level programming languages such as Python, Java, or C++. These languages provide abstractions for data structures, control flow, memory management, and concurrency. Compilers and interpreters translate high-level code into lower-level representations, while operating systems and runtime environments manage resources such as processes, memory, files, and I/O devices. This layer prioritizes productivity, portability, and maintainability over direct hardware control—basically the thing that keeps you awake during final exams in college.
+
+    \item \textbf{Assembly and Machine-Level Abstraction} \\
+    Below high-level languages lies the final boss, the chad section, where real men and women try to understand the instruction set architecture (ISA), which defines the interface between software and hardware. Assembly language offers a symbolic, somewhat human-readable representation of machine instructions, registers, and addressing modes. Machine language encodes these instructions as binary values executed directly by the processor. This layer exposes hardware capabilities more explicitly, enabling fine-grained control over performance, memory usage, and hardware features.
+
+    \item \textbf{Microarchitectural Abstraction} \\
+    The microarchitecture specifies how the processor implements the ISA internally. It includes components such as instruction pipelines, execution units, caches, branch predictors, and memory hierarchies. Although typically invisible to software, microarchitectural design choices significantly influence performance, energy efficiency, and latency. Techniques such as out-of-order execution, speculative execution, and parallelism are implemented at this level.
+
+    \item \textbf{Digital Logic and Physical Implementation} \\
+    At the lowest level, digital logic circuits constructed from transistors realize the functional units of the processor, including registers, arithmetic logic units, and control circuitry. This layer is governed by physical constraints such as clock frequency, signal propagation delay, power consumption, heat dissipation, and fabrication technology. The physical implementation ultimately determines the limits of performance, reliability, and scalability.
+\end{itemize}
+
+Together, these abstraction layers allow complex computing systems to be designed and reasoned about systematically, balancing usability, performance, and physical feasibility.
+% -------------------------------------------------
+
+\section{Binary Representation and Digital Foundations}
+
+All modern computer systems are built upon digital logic and binary representation. This foundation arises from the physical characteristics of electronic components, such as transistors, which naturally support two stable operating states corresponding to logical values. Binary abstraction enables reliable computation even in the presence of noise, efficient storage through discrete encoding, and systematic hardware design using formal mathematical models. This section introduces how data and computation are represented at the lowest logical level of computer architecture, and how these representations connect physical hardware to higher-level software abstractions.
+
+\subsection{Number Systems and Data Representation}
+
+Computers represent all forms of data numerically using positional number systems. While humans commonly use decimal notation, computers rely primarily on the binary system due to its direct correspondence with electronic states and its suitability for digital circuit implementation. Understanding these number systems is essential for interpreting memory contents, instruction encoding, and low-level program behavior.
+
+\subsubsection{Binary, Octal, and Hexadecimal Systems}
+
+The binary system uses base-2 notation, employing only the digits 0 and 1—yes, your entire digital life is ultimately based on just these two values. These digits map directly to low and high voltage levels in digital circuits. Binary representations are fundamental to arithmetic operations, data storage, and instruction execution. However, long sequences of binary digits can be difficult for humans to read and work with.
+
+To improve readability and compactness, binary values are often expressed using octal (base-8) or hexadecimal (base-16) representations. Each octal digit corresponds to three binary bits, while each hexadecimal digit corresponds to four bits, allowing direct and lossless conversion. Hexadecimal notation is especially common in low-level programming, debugging tools, memory dumps, and system documentation due to its balance between compactness and clarity.
+
+\subsubsection{Signed and Unsigned Integer Representation}
+
+Unsigned integers represent non-negative values using straightforward binary encoding, allowing the full range of representable values to be interpreted as magnitudes. Signed integers, by contrast, must represent both positive and negative values within a fixed number of bits.
+
+Most modern systems use two’s complement representation for signed integers. In this scheme, the most significant bit indicates the sign, and negative values are represented by inverting the bits of the corresponding positive value and adding one. Two’s complement simplifies hardware design by allowing addition and subtraction to be performed using the same circuitry, eliminating the need for separate sign-handling logic. For this reason, it has become the de facto standard across contemporary processor architectures.
+
+\subsubsection{Floating-Point Representation}
+
+Real numbers are commonly represented using floating-point formats defined by the ever-present and highly acclaimed IEEE~754 standard. A floating-point value consists of three fields: a sign bit, an exponent that determines the scale, and a significand (or mantissa) that encodes precision. This representation allows computers to efficiently approximate a wide range of real values, from very small fractions to extremely large magnitudes.
+
+Despite its flexibility, floating-point arithmetic is inherently approximate. Rounding errors, limited precision, and special values such as NaN (Not a Number) and infinity can lead to unintuitive behavior in numerical computations. These limitations must be carefully considered in scientific computing, graphics, and financial applications, where numerical accuracy and stability are especially important.
+
+\subsection{Character and Symbol Encoding}
+
+Beyond numeric data—or just 0s and 1s—computers must also represent textual and symbolic information in a standardized and interoperable manner. Character encoding schemes define how characters are mapped to numeric values stored in memory.
+
+\subsection{ASCII Character Encoding}
+
+The American Standard Code for Information Interchange (ASCII) is one of the earliest and most influential character encoding standards in computing. Developed in the 1960s, ASCII was designed to provide a uniform method for representing textual data in computers and communication systems.
+
+ASCII defines a mapping between numeric values and characters using a 7-bit encoding scheme, allowing for 128 distinct symbols. These include uppercase and lowercase letters, decimal digits, punctuation marks, whitespace characters, and control codes such as carriage return, line feed, and tab. An extended 8-bit variant was later adopted by various systems, enabling up to 256 symbols, although this extension was never standardized globally.
+
+The primary objective of ASCII was interoperability. By standardizing character representation, ASCII enabled reliable data exchange between heterogeneous systems, terminals, and peripheral devices. Its simplicity and fixed-width encoding made it well suited for early hardware constraints and low-bandwidth communication channels.
+
+Despite its limited character set, ASCII remains foundational in modern computing. Many programming languages, file formats, network protocols, and operating system interfaces assume ASCII compatibility. Even modern encodings such as UTF-8 are explicitly designed to preserve ASCII values for the first 128 code points, ensuring backward compatibility.
+
+However, ASCII is inherently limited in scope. It cannot represent accented characters, non-Latin alphabets, or many symbolic scripts, making it unsuitable for internationalized applications. These limitations motivated the development of more expressive encoding standards.
+
+\subsection{Unicode and UTF Character Encodings}
+
+Unicode is a universal character encoding standard designed to represent the characters of virtually all written languages, along with symbols, technical notation, and pictographic characters. Its development was motivated by the need to overcome the fragmentation and incompatibility of earlier encoding schemes.
+
+Unlike ASCII, Unicode does not prescribe a single fixed-width encoding. Instead, it defines a comprehensive set of abstract code points, each corresponding to a character. These code points are organized into planes, with the Basic Multilingual Plane (BMP) containing the most commonly used characters.
+
+The primary objective of Unicode is universality. By providing a single, consistent character set, Unicode enables text to be represented, processed, and exchanged correctly across different systems, platforms, and languages. This design supports globalization, localization, and international software development.
+
+Unicode code points are encoded into bytes using transformation formats known as UTF (Unicode Transformation Format). UTF-8 uses a variable-length encoding ranging from one to four bytes and is backward compatible with ASCII. UTF-16 encodes characters using one or two 16-bit units, while UTF-32 uses a fixed 32-bit representation for each character.
+
+UTF-8 has become the dominant encoding for modern software systems, particularly on the web, due to its efficiency for ASCII-based text, byte-level compatibility, and lack of endianness issues. UTF-16 is commonly used in certain programming environments and operating systems, while UTF-32 is mainly used in internal processing where fixed-width representation simplifies indexing.
+
+Despite its expressive power, Unicode introduces additional complexity. Variable-length encodings complicate string manipulation, memory usage, and performance considerations. Additionally, Unicode defines normalization forms, combining characters, and bidirectional text rules, all of which must be handled carefully to ensure correct text processing.
+
+Overall, Unicode and its UTF encodings provide the foundation for modern, multilingual computing, enabling consistent text representation in a globally connected digital environment.
+
+\subsection{Boolean Algebra and Logic Design}
+
+Boolean algebra provides the mathematical foundation for digital circuit design by describing logical relationships using binary variables and operations. Logical operators such as AND, OR, NOT, XOR, and NAND correspond directly to physical gate implementations in hardware. Boolean algebra enables formal reasoning about circuit behavior, optimization, and correctness.
+
+\textbf{Logic Gates and Truth Tables}
+
+Logic gates implement Boolean functions using combinations of transistors arranged to produce specific input--output relationships. Truth tables formally describe the behavior of these gates by enumerating all possible input combinations and their corresponding outputs. They serve as a fundamental tool for circuit analysis, verification, and debugging.
+
+\textbf{Combinational Circuits}
+
+Combinational circuits produce outputs solely as a function of their current inputs, with no dependence on past states. Examples include adders, multiplexers, encoders, decoders, and comparators. These circuits form the computational core of arithmetic and logic units (ALUs) and are essential for performing data-processing operations within a processor.
+
+\textbf{Sequential Circuits and State Machines}
+
+Sequential circuits incorporate memory elements such as latches and flip-flops, enabling the system to retain state information across clock cycles. Finite state machines (FSMs) are a common abstraction used to model control logic, specifying how a system transitions between states in response to inputs and clock events. Sequential logic is central to the implementation of registers, counters, pipelines, and processor control units.
+
+\subsection{Clocks, Timing, and Synchronization}
+
+Clock signals coordinate the operation of synchronous digital systems by defining discrete time steps for state updates. Clock frequency determines the maximum rate at which a system can operate, while factors such as clock skew, jitter, and propagation delay introduce timing constraints. Proper timing analysis and synchronization are essential to ensure correct operation, prevent race conditions, and maintain reliability as system complexity and operating frequencies increase.
+% -------------------------------------------------
+\section{Computer Hardware Components}
+
+Computer hardware refers to the physical parts of a computer system, such as the central processing unit (CPU), random-access memory (RAM), motherboard, data storage devices, graphics card, sound card, and the computer case itself. It also includes external or peripheral devices such as the monitor, mouse, keyboard, speakers, and other input/output devices.
+
+By contrast, software consists of written instructions that can be stored and executed by hardware. Hardware derives its name from the fact that it is physically rigid and relatively difficult to change, whereas software is considered “soft” because it can be modified, updated, or replaced easily without altering the physical system.
+
+Hardware is typically directed by software to execute commands and instructions. A combination of hardware and software forms a usable computing system, although some specialized systems may operate with minimal or fixed software.
+
+\subsection{Computer Fundamental Principle}
+
+John von Neumann, while working on the ENIAC project at the University of Pennsylvania, proposed the von Neumann architecture, which has served as the foundation for most modern computer systems. This architecture is based on a simple but powerful idea: both program instructions and data are stored in the same memory.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/VNCAD.jpeg}
+    \caption{Von Neumann Architecture}
+    \label{fig:von_neumann_architecture}
+\end{figure}
+
+
+The von Neumann architecture is composed of four main components:
+\begin{itemize}
+    \item \textbf{Memory Unit}, which stores both data and program instructions
+    \item \textbf{Central Processing Unit (CPU)}, which executes instructions
+    \item \textbf{Input devices}, which provide data and commands to the system
+    \item \textbf{Output devices}, which present results to the user
+\end{itemize}
+
+The CPU itself is typically divided into two main parts: the control unit, which directs the operation of the system, and the arithmetic logic unit (ALU), which performs calculations and logical operations.
+
+\subsubsection{How the von Neumann Architecture Works}
+
+At a high level, the von Neumann model works like a loop:
+
+First, a program and its data are loaded into memory. The CPU then repeatedly performs a sequence known as the \emph{fetch--decode--execute cycle}. During the \textbf{fetch} step, the CPU retrieves the next instruction from memory. In the \textbf{decode} step, the control unit interprets what the instruction means. Finally, in the \textbf{execute} step, the CPU performs the required operation, which may involve arithmetic, data movement, or input/output.
+
+All communication between the CPU, memory, and I/O devices occurs over a shared set of buses. Because instructions and data use the same memory and bus, the CPU cannot fetch an instruction and access data at the same time. This limitation is known as the \textbf{von Neumann bottleneck}, and it can restrict overall system performance, especially in data-intensive workloads.
+
+Despite this limitation, the simplicity and flexibility of the von Neumann architecture have made it extremely influential. Many modern systems are still based on this model, often with enhancements such as caches, pipelines, and separate instruction and data paths to reduce the impact of the bottleneck.
+
+\subsection{Central Processing Unit (CPU)}
+
+The Central Processing Unit (CPU) is often described as the brain of a computer. It is the component responsible for carrying out most of the thinking, calculating, and decision-making that allows a computer to function. Whether you are playing a game, typing a school assignment, or watching a video, the CPU is constantly processing instructions to make everything work smoothly.
+
+The CPU is usually placed in a special slot called a \emph{socket} on the computer’s motherboard, which acts as the main circuit board connecting all computer components. The CPU is responsible for tasks such as:
+
+\begin{itemize}
+    \item Performing mathematical calculations (such as addition and multiplication)
+    \item Running applications and games
+    \item Handling input/output (I/O) operations by communicating with memory and peripheral devices
+    \item Temporarily storing and retrieving data needed during processing
+\end{itemize}
+
+\textbf{Main Components of the CPU}
+
+The main components of the CPU are clearly illustrated again in the von Neumann architecture. These components include the Arithmetic Logic Unit (ALU), the Control Unit (CU), and registers.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/VNCAD.jpeg}
+    \caption{Von Neumann Architecture}
+    \label{fig:cpu_von_neumann}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Control Unit (CU):}  
+    The control unit manages and coordinates the operation of the CPU. It sends control signals such as clock, reset, and control instructions to other components. The CU ensures that instructions are executed in the correct order and that data moves properly between memory, registers, and the ALU.
+
+    \item \textbf{Arithmetic Logic Unit (ALU):}  
+    The ALU performs all arithmetic operations (addition, subtraction, multiplication, and division) and logical operations (AND, OR, NOT, comparisons). Internally, many complex operations are reduced to simpler ones, such as using addition as the basis for multiplication.
+
+    \item \textbf{Registers and Memory Unit:}  
+    Registers are very small and extremely fast memory locations inside the CPU used to store data and instructions temporarily. Modern CPUs also include cache memory, which is faster than main memory (RAM). During execution, the CPU fetches data from RAM or storage and places it into registers or cache for quick access.
+\end{itemize}
+
+\textbf{Functions of the CPU}
+
+The CPU operates using a continuous process known as the \emph{instruction cycle}, which consists of four main steps:
+
+\begin{itemize}
+    \item \textbf{Fetch:}  
+    The CPU retrieves the next instruction from main memory (RAM).
+
+    \item \textbf{Decode:}  
+    The control unit interprets the instruction and determines what actions are required.
+
+    \item \textbf{Execute:}  
+    The CPU performs the operation, such as a calculation, data transfer, or logical comparison.
+
+    \item \textbf{Store:}  
+    The result of the execution is stored back in memory or in a register for later use.
+\end{itemize}
+
+\textbf{Types of CPUs}
+
+CPUs can be classified in several ways, depending on their design and purpose:
+
+\begin{itemize}
+    \item \textbf{Single-core CPUs:}  
+    Contain one processing unit and can handle one task at a time.
+
+    \item \textbf{Multi-core CPUs:}  
+    Include two or more cores, allowing multiple tasks to be processed simultaneously.
+
+    \item \textbf{General-purpose CPUs:}  
+    Found in personal computers and laptops, designed to handle a wide variety of tasks.
+
+    \item \textbf{Special-purpose CPUs:}  
+    Used in embedded systems, servers, or mobile devices, optimized for specific workloads.
+\end{itemize}
+
+\textbf{How Does the CPU Make a Computer Faster?}
+
+A CPU makes a computer faster through several key factors. Higher clock speeds allow the CPU to execute more instructions per second. Multiple cores enable parallel processing, allowing several tasks to run at the same time. Cache memory reduces the time needed to access frequently used data, and advanced techniques such as pipelining and out-of-order execution improve efficiency by keeping the CPU busy instead of waiting for data.
+
+Together, these features allow modern CPUs to perform billions of operations per second, making computers faster, more responsive, and capable of handling complex applications.
+
+\subsection{Primary Storage}
+
+Primary storage, also known as \emph{main memory}, refers to the memory that the CPU can access directly and at very high speed while the computer is operating. It temporarily holds the data and instructions that are actively being used or processed. Because the CPU can only execute instructions that are already in primary storage, this type of memory is essential for real-time computation.
+
+Most primary storage is volatile, meaning its contents are lost when power is removed. This makes it unsuitable for long-term storage but ideal for fast, short-term data access during program execution.
+
+\textbf{Importance of Primary Storage}
+
+Primary storage plays a critical role in system performance. The CPU operates much faster than secondary storage devices, so frequently used data must be kept close to the processor. If a system lacks sufficient primary storage, it may experience slowdowns, frequent program reloads, or increased reliance on virtual memory.
+
+In modern systems, efficient use of primary storage allows multitasking, faster application response times, and smoother overall system operation.
+
+\textbf{Types of Primary Storage}
+\begin{itemize}
+    \item \textbf{RAM (Random Access Memory):} \\
+    RAM is the primary working memory of the computer and plays a central role in system performance. It temporarily stores operating system components, running applications, and active data that the CPU needs immediate access to. RAM allows both read and write operations and provides uniform access time to any memory location, regardless of where the data is stored.
+
+    One of the most important properties of RAM is its speed, which is significantly faster than secondary storage devices. However, RAM is volatile, meaning all stored data is lost when the computer is powered off. The capacity of RAM directly affects multitasking capabilities: systems with more RAM can run more applications simultaneously and handle larger datasets without slowing down. Modern RAM technologies, such as DDR4 and DDR5, improve bandwidth, reduce latency, and increase energy efficiency.
+
+    \item \textbf{ROM (Read-Only Memory):} \\
+    ROM stores essential system instructions required to initialize and start the computer, commonly known as firmware. These instructions include the boot process, hardware initialization routines, and low-level system configuration. Unlike RAM, ROM is non-volatile, so its contents remain intact even when the system is turned off.
+
+    Traditionally, ROM could not be modified after manufacturing. However, modern systems use programmable variants such as EEPROM and flash-based ROM, allowing firmware updates to fix bugs, improve compatibility, or enhance security. ROM is optimized for reliability rather than speed, ensuring that critical startup instructions are always available and protected from accidental modification.
+
+    \item \textbf{Cache Memory:} \\
+    Cache memory is a small, high-speed memory located inside or very close to the CPU. Its primary function is to reduce the time required to access frequently used data and instructions. By keeping commonly accessed information close to the processor, cache memory significantly improves execution speed and overall system responsiveness.
+
+    Cache memory is organized into multiple levels: L1 cache is the smallest and fastest, L2 cache is larger and slightly slower, and L3 cache is shared among CPU cores and balances capacity with speed. Cache memory operates transparently to software, managed automatically by the hardware. Although cache memory is expensive and limited in size, it is one of the most critical components for achieving high CPU performance.
+\end{itemize}
+
+\textbf{Advantages and Limitations of Primary Storage}
+
+Primary storage offers very fast access speeds and direct communication with the CPU, but it is limited in capacity and relatively expensive compared to secondary storage. Additionally, its volatile nature means it cannot be used for permanent data storage.
+
+Despite being tiny in size compared to secondary storage, cache memory can dramatically improve performance. A few megabytes of cache can save millions of slow memory accesses per second, making it one of the most valuable components inside a CPU.
+
+---
+
+\subsection{Secondary Storage Devices}
+
+Secondary storage devices are used to store data and programs permanently. Unlike primary storage, secondary storage is non-volatile, meaning that information remains available even after the computer is turned off. These devices are designed for long-term data retention rather than high-speed access.
+
+Secondary storage holds operating systems, applications, personal files, multimedia content, and system backups. When a program is executed, it is transferred from secondary storage into primary storage so the CPU can process it efficiently.
+
+\textbf{Importance of Secondary Storage}
+
+Secondary storage is essential for preserving information over time. Without it, computers would lose all data whenever they shut down. It also provides massive storage capacity at a relatively low cost, making it suitable for storing large datasets, software libraries, and user-generated content.
+
+Secondary storage also plays a key role in system recovery, backups, and data sharing across devices.
+
+\textbf{Types of Secondary Storage Devices}
+
+\begin{itemize}
+    \item \textbf{Hard Disk Drives (HDDs):} \\
+    HDDs store data on spinning magnetic platters. They offer high storage capacity at a low cost per gigabyte but are slower than modern alternatives and more vulnerable to physical damage due to their moving parts.
+
+    \item \textbf{Solid State Drives (SSDs):} \\
+    SSDs use flash memory to store data and have no moving parts. This results in much faster read and write speeds, lower power consumption, and increased durability. SSDs significantly improve boot times and application loading speeds.
+
+    \item \textbf{Optical Storage Devices:} \\
+    Optical media such as CDs, DVDs, and Blu-ray discs store data using laser technology. While their use has declined, they are still employed for software distribution, media playback, and archival storage.
+
+    \item \textbf{Flash Storage Devices:} \\
+    USB flash drives and memory cards provide portable and convenient storage. They are widely used for file transfer, backups, and temporary data storage.
+
+    \item \textbf{Network and Cloud Storage:} \\
+    Modern systems increasingly rely on network-attached storage (NAS) and cloud services. These solutions allow data to be accessed remotely, shared across devices, and protected through redundancy and backups.
+\end{itemize}
+
+\textbf{Advantages and Limitations of Secondary Storage}
+
+Secondary storage offers large capacity, persistence, and affordability, but it is significantly slower than primary storage. Even the fastest SSDs cannot match the speed of RAM or cache memory, which is why data must be loaded into primary storage before processing.
+
+Even with modern SSDs capable of reading gigabytes per second, accessing data from secondary storage is still thousands of times slower than accessing CPU registers. This is why operating systems rely heavily on caching and memory hierarchies to hide storage latency.
+
+\subsection{Input and Output Devices}
+
+Input and output (I/O) devices allow users and external systems to communicate with a computer. Input devices provide data and control signals to the system, while output devices present processed information in a human-readable or machine-readable form.
+
+\textbf{Input Devices}
+
+Input devices enable users to interact with the computer by entering data or commands. Common examples include:
+
+\begin{itemize}
+    \item Keyboard and mouse
+    \item Touchscreens and touchpads
+    \item Microphones and webcams
+    \item Scanners and game controllers
+\end{itemize}
+
+\textbf{Output Devices}
+
+Output devices display or transmit the results of computation. Typical output devices include:
+
+\begin{itemize}
+    \item Monitors and displays
+    \item Printers
+    \item Speakers and headphones
+    \item Projectors
+\end{itemize}
+
+Some devices, such as touchscreens and network interfaces, function as both input and output devices. Efficient I/O handling is essential for system responsiveness and user experience.
+
+\subsection{Motherboards, Chipsets, and Interconnects}
+
+The motherboard is the main circuit board of a computer system. It physically connects and electrically links all major components, including the CPU, memory, storage devices, and peripheral interfaces. The motherboard provides the communication pathways that allow components to work together as a unified system.
+
+\textbf{Chipsets}
+
+The chipset is a collection of integrated circuits on the motherboard that manage data flow between the CPU, memory, storage, and peripheral devices. Traditionally, chipsets were divided into a northbridge and southbridge, but modern systems integrate many of these functions directly into the CPU.
+
+Chipsets determine important system capabilities such as supported memory types, expansion slots, storage interfaces, and I/O ports.
+
+\textbf{Interconnects}
+
+Interconnects are the buses and links that carry data, addresses, and control signals between components. Examples include:
+
+\begin{itemize}
+    \item PCI Express (PCIe) for graphics cards and high-speed devices
+    \item Memory buses connecting the CPU to RAM
+    \item SATA and NVMe interfaces for storage devices
+\end{itemize}
+
+High-speed and efficient interconnects are critical for system performance, especially in modern multi-core and data-intensive systems.
+
+\subsection{Power Delivery and Thermal Management}
+
+Power delivery and thermal management ensure that computer components receive stable electrical power and operate within safe temperature limits. Without proper management, systems can become unstable, inefficient, or even permanently damaged.
+
+\textbf{Power Delivery}
+
+The power supply unit (PSU) converts electrical power from an outlet into usable voltages for internal components. It must provide consistent and reliable power to the CPU, GPU, memory, storage, and peripherals. Modern systems also use voltage regulators on the motherboard to precisely control power delivery to sensitive components.
+
+\textbf{Thermal Management}
+
+As components operate, they generate heat. Thermal management systems are designed to remove this heat and maintain safe operating temperatures. Common cooling solutions include:
+
+\begin{itemize}
+    \item Heat sinks and fans
+    \item Liquid cooling systems
+    \item Thermal paste and heat spreaders
+\end{itemize}
+
+Effective thermal management improves performance, extends hardware lifespan, and prevents overheating-related failures. In many systems, performance is directly linked to temperature, as CPUs and GPUs may reduce speed to avoid damage when they become too hot.
+
+% -------------------------------------------------
+
+\section{Processor Architecture}
+As the topics in this article become more complex and more significant within the architectural model, it is necessary to shift to a more detailed level of explanation. For this reason, the following sections expand on the functionality of key concepts and explain how they fit within fundamental computer science knowledge.
+
+\subsection{Instruction Set Architecture (ISA)}
+
+A CPU can be thought of as a machine that understands only a specific language. The \textbf{Instruction Set Architecture (ISA)} is that language. Just as a human language has words and grammatical rules that give meaning, an ISA defines which instructions exist, what they do, and how they are used. In other words, it specifies the vocabulary and grammar of the computer architecture.
+
+An ISA tells programmers and compilers which commands the CPU understands, such as adding or subtracting numbers, loading and storing data, and comparing values. It also defines the types of data the CPU can operate on, how memory is accessed, and how data moves between memory and the CPU. Additionally, the ISA specifies the available registers, which are small and fast storage locations inside the CPU used to hold temporary data and intermediate results.
+
+The ISA is critically important because software is written for an ISA rather than for a specific physical processor. This means that different CPUs can run the same programs as long as they implement the same ISA. As a result, hardware designers are free to change or optimize the internal design of a CPU, as long as it continues to follow the rules defined by the ISA.
+
+Some real-world examples of widely used ISAs include:
+\begin{itemize}
+    \item \textbf{x86:} Used by most Intel and AMD desktop and laptop computers
+    \item \textbf{ARM:} Used in smartphones, tablets, and many modern laptops
+    \item \textbf{RISC-V:} An open and modern ISA widely used in research and industry
+\end{itemize}
+
+In conclusion, the ISA acts as the interface between software and hardware. It defines the commands a CPU understands and specifies how those commands behave, enabling compatibility between programs and different hardware implementations.
+
+\subsubsection{Instruction Formats and Encodings}
+
+An \textbf{instruction format} describes how a single CPU instruction is laid out in bits. You can think of an instruction as a form with different fields. Kind of like a train ticket that includes a destination, a seat number, and a class. In the same way, each instruction has fixed fields that tell the CPU what to do and what data to use.
+
+Some typical instruction format fields include:
+\begin{enumerate}
+    \item \textbf{Opcode}  
+    Tells the CPU which operation to perform, such as \texttt{ADD}, \texttt{SUB}, \texttt{LOAD}, or \texttt{JUMP}.
+    
+    \item \textbf{Operands}  
+    Indicate which data to use: registers, memory addresses, or immediate values.
+    
+    \item \textbf{Addressing mode} (sometimes implicit)  
+    Explains how to interpret the operands, for example whether a value comes from a register, from memory, or is written directly in the instruction.
+\end{enumerate}
+
+A simple conceptual example to start getting used to this idea is:
+\begin{verbatim}
+[ opcode | register1 | register2 | register3 ]
+\end{verbatim}
+This could mean: add the values in \texttt{register2} and \texttt{register3}, and store the result in \texttt{register1}. Simple enough.
+
+\textbf{Instruction Encoding (the actual bits)}
+
+Instruction encoding is how the instruction format is translated into 0s and 1s. The CPU does not see something readable like:
+\begin{verbatim}
+ADD R1, R2, R3
+\end{verbatim}
+What the CPU actually sees is something more like:
+\begin{verbatim}
+010011 001 010 011
+\end{verbatim}
+Not very friendly, but much more useful for hardware.
+
+For example, suppose:
+\begin{itemize}
+    \item The opcode uses 6 bits
+    \item Each register uses 3 bits
+\end{itemize}
+
+Then the encoding would look like this:
+\begin{verbatim}
+010011 | 001 | 010 | 011
+ opcode   R1    R2    R3
+\end{verbatim}
+This is the binary encoding of the instruction.
+
+Now, not all ISAs use the same kind of instruction format. The two most common approaches are \textbf{fixed-length} and \textbf{variable-length} instructions.
+
+\textbf{Fixed-length instructions}
+
+In this format, all instructions have the same size (for example, 32 bits). This makes decoding easier and usually faster, which keeps the hardware simpler. Architectures like ARM and RISC-V use fixed-length instructions.
+\begin{verbatim}
+[ opcode | field | field | field ] \quad (always 32 bits)
+\end{verbatim}
+
+\textbf{Variable-length instructions}
+
+Here, instructions can have different sizes. This often makes programs more compact, but decoding becomes more complicated. The x86 architecture is a classic example of this approach.
+\begin{verbatim}
+[ prefix ][ opcode ][ mod ][ reg ][ immediate ][ ... ]
+\end{verbatim}
+
+In the end, instruction formats and encodings affect almost everything: how complex the CPU is, how fast it can decode instructions, how much power it uses, how big programs are, and even how compilers are designed. That’s why different ISAs make different trade-offs.
+
+\subsubsection{Addressing Modes}
+
+An \textbf{addressing mode} defines how an instruction finds its operands (the data it works on).  
+In short, it answers a very simple question: \emph{where is the data?}
+
+The data used by an instruction can be located in different places: it can be written directly inside the instruction, stored in a CPU register, located in memory, or found at an address that is computed using some math. Addressing modes exist to describe all these possibilities.
+
+Addressing modes give the CPU flexibility without requiring thousands of different instructions. The idea is simple: the \textbf{opcode} says \emph{what} to do, and the \textbf{addressing mode} says \emph{where} the data is.
+
+There are many addressing modes, but some of the most important ones are listed below.
+
+\textbf{1. Immediate addressing}
+
+The value is stored directly inside the instruction.
+\begin{verbatim}
+ADD R1, R2, #5
+\end{verbatim}
+Here, \texttt{\#5} is the actual value. This is fast because no memory access is needed, but the value size is limited.
+
+\textbf{2. Register addressing}
+
+The operand is stored in a CPU register.
+\begin{verbatim}
+ADD R1, R2, R3
+\end{verbatim}
+All data comes from registers, which makes this very fast.
+
+\textbf{3. Direct (absolute) addressing}
+
+The instruction contains the memory address of the data.
+\begin{verbatim}
+LOAD R1, 1000
+\end{verbatim}
+This loads the value stored at memory address \texttt{1000} into \texttt{R1}.
+
+\textbf{4. Indirect addressing}
+
+The instruction refers to a memory location that holds another address.
+\begin{verbatim}
+LOAD R1, (1000)
+\end{verbatim}
+The CPU first reads the address stored at \texttt{1000}, then uses that address to find the actual data.
+
+\textbf{5. Register indirect addressing}
+
+The address of the data is stored in a register.
+\begin{verbatim}
+LOAD R1, (R2)
+\end{verbatim}
+The CPU uses the value in \texttt{R2} as the memory address.
+
+\textbf{6. Base + offset (displacement) addressing}
+
+The final address is computed by adding an offset to a register value.
+\begin{verbatim}
+LOAD R1, 8(R2)
+\end{verbatim}
+The effective address is \texttt{R2 + 8}, commonly used for arrays and stack access.
+
+\textbf{7. Indexed addressing}
+
+The address is computed using an index register.
+\begin{verbatim}
+LOAD R1, (R2, R3)
+\end{verbatim}
+The effective address is typically \texttt{R2 + R3}, which is useful in loops.
+
+\medskip
+
+A simplified view of how addressing modes work internally is the following: for a memory instruction, the CPU decodes the instruction, determines the addressing mode, computes the \textbf{effective address}, accesses memory if needed, and finally executes the operation. The effective address is the final memory location calculated by the addressing mode.
+
+\subsubsection{Register File}
+
+A \textbf{register file} is a small, very fast storage area inside the CPU that holds the registers.  
+If main memory is a warehouse, then registers are the items on the workbench, and the register file is the organized rack that holds them.
+
+Accessing main memory is slow, while accessing registers is extremely fast. Registers allow the CPU to store temporary values, perform arithmetic quickly, avoid constant memory accesses, and execute instructions efficiently.
+
+A register file is defined by the ISA and implemented in hardware. It specifies how many registers exist and how they are used. Some examples include:
+\begin{itemize}
+    \item \textbf{RISC-V:} 32 integer registers
+    \item \textbf{ARM:} 31 general-purpose registers
+    \item \textbf{x86:} Fewer architectural registers (but many more hidden internally)
+\end{itemize}
+
+In general, \textbf{more registers means fewer memory accesses}, which usually means better performance.
+
+\textbf{Register width}
+
+Each register has a fixed size that matches the word size of the ISA:
+\begin{itemize}
+    \item 32-bit CPU $\rightarrow$ 32-bit registers
+    \item 64-bit CPU $\rightarrow$ 64-bit registers
+\end{itemize}
+
+\textbf{Register file access}
+
+A register file can read multiple registers at the same time and write to one (or sometimes more) registers per clock cycle. A typical RISC design uses \textbf{two read ports and one write port}, which matches common instructions like:
+\begin{verbatim}
+ADD R1, R2, R3
+\end{verbatim}
+This instruction reads \texttt{R2} and \texttt{R3}, and writes the result into \texttt{R1}.
+
+\textbf{Register file during instruction execution}
+
+Using the instruction \texttt{ADD R1, R2, R3} as an example, the register file is used as follows:
+\begin{enumerate}
+    \item The instruction is decoded
+    \item The register file:
+    \begin{itemize}
+        \item reads \texttt{R2}
+        \item reads \texttt{R3}
+    \end{itemize}
+    \item The ALU adds the two values
+    \item The result is written back to \texttt{R1}
+\end{enumerate}
+
+In simple CPUs, all of this can happen within a single clock cycle.
+
+\textbf{Types of registers}
+
+There are two main types of registers associated with a register file:
+\begin{itemize}
+    \item \textbf{General-purpose registers (GPRs):}  
+    Used for arithmetic, addresses, and pointers. Most instructions operate on these.
+    
+    \item \textbf{Special-purpose registers:}  
+    Often separate or logically distinct, such as:
+    \begin{itemize}
+        \item Program Counter (PC)
+        \item Stack Pointer (SP)
+        \item Status / Flags register
+    \end{itemize}
+    Some ISAs include the PC or SP inside the register file, while others do not.
+\end{itemize}
+
+\medskip
+
+\textbf{Register file vs. main memory}
+
+\begin{center}
+\begin{tabular}{l|c|c}
+\textbf{Feature} & \textbf{Register File} & \textbf{Main Memory} \\
+\hline
+Location & Inside the CPU & Outside the CPU \\
+Speed & Fastest & Much slower \\
+Size & Very small & Very large \\
+Access & Direct & Via LOAD / STORE \\
+\end{tabular}
+\end{center}
+
+\medskip
+
+\textbf{Key takeaways}
+\begin{itemize}
+    \item Register file = collection of CPU registers
+    \item Fastest storage in the system
+    \item Multiple read ports, limited write ports
+    \item Central to instruction execution
+    \item Defined by the ISA, optimized by the microarchitecture
+\end{itemize}
+
+\subsubsection{Data Types and Operand Sizes}
+
+A \textbf{data type} tells the CPU how to interpret a bunch of bits. By themselves, bits have no meaning at all; the data type is what gives them meaning. Some common CPU data types are the basic ones you already know: integers, floating-point numbers, booleans, and addresses (or pointers). An address is simply a number that represents a memory location, and its size is usually equal to the register size of the CPU.
+
+\textbf{What are operand sizes?}
+
+An \textbf{operand size} specifies how many bits are used to represent a value. In other words, it answers the question: \emph{how big is this number?}
+
+Common operand sizes are shown below:
+
+\begin{center}
+\begin{tabular}{c|c|c}
+\textbf{Size} & \textbf{Bits} & \textbf{Name} \\
+\hline
+1 byte & 8  & Byte \\
+2 bytes & 16 & Halfword \\
+4 bytes & 32 & Word \\
+8 bytes & 64 & Double word \\
+\end{tabular}
+\end{center}
+
+Operand size matters because the same instruction can behave very differently depending on how many bits it operates on. For example:
+\begin{itemize}
+    \item An \textbf{8-bit add} works with small numbers and overflows quickly
+    \item A \textbf{64-bit add} handles much larger numbers and offers more precision, but may be slightly slower
+\end{itemize}
+
+Another very important concept is \textbf{signed vs. unsigned} values. The bits may be exactly the same, but the way they are interpreted is different. A value can represent a negative number or a large positive number depending entirely on whether it is treated as signed or unsigned.
+
+Memory access instructions must also know the operand size, because the CPU needs to know how many bytes to read or write. Using the wrong size means reading the wrong data. For example:
+\begin{verbatim}
+LOADB   -> 1 byte
+LOADW   -> 2 bytes
+LOAD    -> 4 or 8 bytes
+\end{verbatim}
+
+\medskip
+
+\textbf{What you should absolutely remember}
+
+\begin{itemize}
+    \item Data type = meaning of the bits
+    \item Operand size = number of bits used
+    \item The same bits can mean different things
+    \item CPU instructions are size-aware
+    \item Larger sizes mean more range and precision
+\end{itemize}
+
+In summary, data types define \emph{what} a value represents, while operand sizes define \emph{how many bits} are used to store and process it.
+
+\subsubsection{Control Flow Instructions}
+
+Control flow instructions decide which instruction the CPU executes next.  
+Normally, the CPU runs instructions one after another in order. Control flow instructions change that order.
+
+By default, during normal execution:
+\begin{enumerate}
+    \item The CPU executes an instruction
+    \item The Program Counter (PC) moves to the next instruction
+    \item The process repeats
+\end{enumerate}
+This is called \textbf{sequential execution}.
+
+Without control flow, programs would only be able to run straight-line code. They could never make decisions, repeat actions, or structure code into functions. Control flow instructions enable \texttt{if/else} statements, loops, function calls, and even program start and exit.
+
+There are different types of control flow instructions:
+\begin{itemize}
+    \item \textbf{Jump (unconditional branch):} always changes the execution flow
+    \item \textbf{Conditional branch:} jumps only if a condition is true
+    \item \textbf{Compare instructions:} set conditions used by branches
+    \item \textbf{Function call and return:} move execution to and from functions
+\end{itemize}
+
+Modern CPUs try to execute instructions ahead of time to improve performance. However, branches can cause problems because:
+\begin{itemize}
+    \item The CPU may not know which path will be taken
+    \item This can lead to stalls or wasted work
+\end{itemize}
+
+This is why modern processors use \textbf{branch prediction}, an advanced technique that guesses which path will be taken before the condition is fully resolved.
+
+\medskip
+
+\textbf{Key ideas}
+\begin{itemize}
+    \item Control flow instructions change the execution order
+    \item They work by modifying the Program Counter (PC)
+    \item Main types include jumps, conditional branches, calls, and returns
+    \item They are essential for decisions, loops, and structured programs
+\end{itemize}
+
+In short, control flow instructions direct the CPU to choose which instruction runs next, making decisions, loops, and function calls possible.
+
+\subsection{RISC vs CISC Design Philosophies}
+
+\subsubsection{RISC Principles}
+
+A \textbf{RISC} design is a way to build a processor that focuses on simplicity and speed.  
+RISC stands for \textbf{Reduced Instruction Set Computer}. Instead of giving the processor many complex commands, RISC uses a small set of very simple instructions. Each instruction does one small thing, and most instructions take the same amount of time to execute (often one clock cycle).
+
+You can think of RISC like LEGO bricks: each brick is simple, but by combining many of them you can build complex things—anything from a small house to a Death Star, or even a whole movie.
+
+\textbf{Load–store approach}
+
+In RISC architectures, only two instructions are allowed to access memory: \textbf{load} and \textbf{store}. A \texttt{load} instruction moves data from memory into a register, and a \texttt{store} instruction moves data from a register back to memory. All calculations happen using registers, which are very fast storage locations inside the CPU. This keeps the processor fast and predictable.
+
+RISC designs simplify the hardware and rely on smarter software instead. The CPU is easier to design and can use techniques such as \textbf{pipelining}, which overlaps work like an assembly line. Compilers (software that translates code into instructions) do more of the work by arranging simple instructions efficiently.
+
+\textbf{Why it is fast and popular}
+
+RISC designs have several advantages: they use less power, run efficiently at high speeds, and scale well. This is why RISC is widely used today, from ARM processors in phones and tablets to Apple Silicon processors based on ARM, as well as many embedded systems.
+
+\subsubsection{CISC Principles}
+
+\textbf{CISC} follows almost the opposite design philosophy of RISC.  
+CISC stands for \textbf{Complex Instruction Set Computer}. These processors provide many powerful instructions, but each instruction is more complex. A single instruction can perform multiple steps at once and may take different amounts of time to execute.
+
+Using the LEGO analogy again, CISC is like having large prebuilt blocks. One block can do the work of several small bricks at once.
+
+In CISC architectures, instructions can work directly with memory: loading data, operating on it, and storing it back in a single command. This reduces the number of instructions a program needs, which was especially important when memory was small and programs had to be compact.
+
+Because the instructions are complex, the CPU hardware is also more complex. Many CISC instructions are internally broken down into simpler steps called \textbf{micro-operations}. As a result, compilers have an easier job because the CPU does more of the heavy lifting. In CISC, more work is done in hardware and less in software.
+
+So why does CISC still matter today? CISC designs are excellent at running older software and can be extremely powerful thanks to modern optimizations. The most well-known examples are \textbf{x86} and \textbf{x86-64}, used by Intel and AMD CPUs in most desktop and laptop computers.
+
+\medskip
+
+\textbf{RISC vs. CISC comparison}
+
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{RISC} & \textbf{CISC} \\
+\hline
+Simple instructions & Complex instructions \\
+Fixed instruction size & Variable instruction size \\
+Load/store only & Memory operations inside instructions \\
+Easier CPU design & More complex CPU design \\
+Very power efficient & Backward compatible and powerful \\
+\end{tabular}
+\end{center}
+
+\subsubsection{Case Studies: ARM, x86, and RISC-V}
+
+To understand how RISC and CISC ideas work in practice, it helps to look at real processors. We start with ARM, then x86, and finally RISC-V.
+
+\paragraph{ARM: Commercial RISC Built for Efficiency}
+
+ARM is a commercial RISC architecture designed from the beginning with efficiency in mind. Its design philosophy is based on simple, mostly fixed-length instructions and a strong load--store model. From day one, ARM focused on low power consumption.
+
+In practice, this means ARM achieves excellent performance per watt. It is very effective at pipelining and out-of-order execution while keeping energy usage low, which makes it ideal for battery-powered devices.
+
+ARM processors are commonly used in:
+\begin{itemize}
+    \item Smartphones and tablets
+    \item Laptops using Apple Silicon (M1, M2, etc.)
+    \item Embedded systems
+    \item Some servers
+\end{itemize}
+
+\paragraph{x86: CISC on the Outside, RISC on the Inside}
+
+The x86 architecture was originally designed as a CISC instruction set. It uses large, complex, variable-length instructions and places a strong emphasis on backward compatibility.
+
+What actually happens inside modern x86 CPUs is more interesting. Today’s x86 processors translate complex CISC instructions into simpler, RISC-like \textbf{micro-operations}. These micro-ops then flow through a pipeline that looks very similar to a RISC design.
+
+So despite being CISC at the instruction-set level, the execution core behaves very much like RISC. Most of the complexity lives in the front end of the processor.
+
+x86 processors are typically used in:
+\begin{itemize}
+    \item Desktop and laptop computers
+    \item High-performance servers
+    \item Workstations
+\end{itemize}
+
+x86 proves that it is possible to keep a CISC interface for compatibility while using RISC ideas internally for performance.
+
+\paragraph{RISC-V: Pure and Open RISC}
+
+RISC-V takes the RISC philosophy to its logical extreme. It uses a very small base instruction set, with optional extensions added only when needed. This allows designers to build a CPU with exactly the features they want—no more, no less.
+
+RISC-V is easier to design and verify, has no license fees, and is completely open. This makes it especially attractive for research, startups, and specialized hardware.
+
+RISC-V is commonly used in:
+\begin{itemize}
+    \item Microcontrollers
+    \item Embedded systems
+    \item Accelerators
+    \item Emerging servers and research CPUs
+\end{itemize}
+
+In short, RISC-V is minimal, clean, and open.
+
+\medskip
+
+ARM, x86, and RISC-V make different design choices that directly affect performance, power, and cost. These differences all trace back to RISC vs. CISC trade-offs.
+
+\subsubsection*{1. Performance}
+
+\textbf{Instruction decoding}
+
+\begin{itemize}
+    \item \textbf{x86}
+    \begin{itemize}
+        \item Variable-length, complex instructions
+        \item Requires large and power-hungry decode logic
+        \item Instructions are broken into micro-operations
+        \item Decode stage can become a bottleneck
+    \end{itemize}
+
+    \item \textbf{ARM / RISC-V}
+    \begin{itemize}
+        \item Mostly fixed-length instructions
+        \item Simple and fast decoding
+        \item Instructions flow directly into execution
+    \end{itemize}
+\end{itemize}
+
+\textbf{Effect:}  
+RISC designs waste fewer cycles and less silicon on decoding.
+
+\medskip
+
+\textbf{Pipeline efficiency}
+
+\begin{itemize}
+    \item \textbf{RISC (ARM, RISC-V)}
+    \begin{itemize}
+        \item Uniform instruction timing
+        \item Predictable pipelines
+        \item Easier to keep execution units busy
+    \end{itemize}
+
+    \item \textbf{x86}
+    \begin{itemize}
+        \item Instruction timing varies
+        \item Requires more buffering, reordering, and speculation
+    \end{itemize}
+\end{itemize}
+
+\textbf{Effect:}  
+RISC pipelines scale more cleanly to wide, high-frequency designs.
+
+\medskip
+
+\textbf{Real-world performance paradox}
+
+Despite the above, x86 CPUs often match or beat ARM in raw performance because of:
+\begin{itemize}
+    \item Larger die area
+    \item Extremely aggressive out-of-order execution
+    \item Huge caches
+\end{itemize}
+
+\textbf{Key point:}  
+x86 wins with brute force; RISC wins with efficiency.
+
+\subsubsection*{2. Power}
+
+\textbf{Decode and control logic}
+
+\begin{itemize}
+    \item \textbf{x86}
+    \begin{itemize}
+        \item Decode can consume a significant fraction of total power
+        \item Microcode engines stay active
+    \end{itemize}
+
+    \item \textbf{ARM / RISC-V}
+    \begin{itemize}
+        \item Smaller control logic
+        \item Lower switching activity
+    \end{itemize}
+\end{itemize}
+
+\textbf{Effect:}  
+Simpler instructions mean fewer transistors toggling, which means lower power.
+
+\medskip
+
+\textbf{Energy per instruction}
+
+\begin{itemize}
+    \item \textbf{RISC:} More instructions, but each one is cheap
+    \item \textbf{CISC:} Fewer instructions, but each one is energy-expensive
+\end{itemize}
+
+\textbf{Result:}  
+RISC usually wins in energy per task, not instruction count.
+
+\subsubsection*{3. Cost}
+
+\textbf{Silicon area}
+
+\begin{itemize}
+    \item \textbf{x86:} Large decode logic, complex compatibility circuitry, large die
+    \item \textbf{ARM:} Moderate complexity, optimized for mass production
+    \item \textbf{RISC-V:} Minimal base ISA, smallest possible cores
+\end{itemize}
+
+\textbf{Effect:}  
+Smaller dies mean more chips per wafer and lower cost.
+
+\medskip
+
+\textbf{Design and customization cost}
+
+\begin{itemize}
+    \item \textbf{x86:} Extremely expensive to design and verify
+    \item \textbf{ARM:} License fees, but a mature ecosystem
+    \item \textbf{RISC-V:} No license fees and full customization
+\end{itemize}
+
+\subsubsection*{Summary Table}
+
+\begin{center}
+\begin{tabular}{l|c|c|c}
+\textbf{Factor} & \textbf{ARM} & \textbf{x86} & \textbf{RISC-V} \\
+\hline
+Decode complexity & Low & Very high & Very low \\
+Pipeline efficiency & High & Medium & High \\
+Power efficiency & Very high & Medium & Very high \\
+Die size & Medium & Large & Small \\
+Design cost & High (license) & Very high & Low \\
+Customization & Limited & None & Excellent \\
+\end{tabular}
+\end{center}
+
+\medskip
+
+\textbf{The deep truth}
+
+\begin{itemize}
+    \item x86 spends complexity on compatibility
+    \item ARM spends complexity on power efficiency
+    \item RISC-V lets designers choose where to spend complexity
+\end{itemize}
+
+RISC designs minimize wasted work in power, silicon, and control logic, while x86 compensates with scale and aggressive optimization.
+% -------------------------------------------------
+
+\section{Microarchitecture}
+
+\subsection{Datapath and Control Unit Design}
+
+At a high level, a CPU can be split into two main parts: the \textbf{datapath} and the \textbf{control unit}.  
+The datapath does the actual work on data, while the control unit tells the datapath what to do and when to do it. You can think of it as \emph{muscles versus brain}.
+
+\textbf{Datapath: what it is}
+
+The \textbf{datapath} is the collection of hardware blocks that store, move, and operate on data. Typical datapath components include:
+\begin{itemize}
+    \item \textbf{Registers} (store values)
+    \item \textbf{ALU} (add, subtract, AND, compare, etc.)
+    \item \textbf{Multiplexers (MUXes)} that choose between different inputs
+    \item \textbf{Buses and wires} that carry data
+    \item Sometimes shifters, comparators, and other small units
+\end{itemize}
+
+The datapath answers questions like:
+\begin{itemize}
+    \item “Add these two numbers”
+    \item “Move this value from register A to register B”
+\end{itemize}
+
+The datapath can perform many different operations, but it does not decide \emph{which} operation to perform by itself. Using a factory analogy, the datapath is like the factory floor full of machines and conveyor belts. It can cut, move, and assemble things—but only if someone tells it what to do.
+
+\textbf{Control Unit: the boss}
+
+The \textbf{control unit} is the “boss” of the CPU. It generates control signals that tell the datapath:
+\begin{itemize}
+    \item Which operation to perform
+    \item Which registers to read or write
+    \item Which paths the data should take
+\end{itemize}
+
+It controls many parts of the CPU, including the ALU, register file, multiplexers, and the Program Counter (PC).
+
+\textbf{How it works}
+
+The control unit looks at the current instruction (its opcode) and the current state or clock cycle. Based on this information, it decides what should happen in the current cycle and what should happen in the next one.
+
+The control unit is like a manager reading instructions and shouting commands to the workers:
+\emph{“You add these numbers!”}  
+\emph{“You store the result over there!”}
+
+Together, the datapath and control unit form a complete system: one that knows how to do the work, and one that knows when and how the work should be done.
+
+\subsection{Instruction Execution Cycle}
+
+Every instruction in a CPU goes through the same basic loop:
+\textbf{Fetch $\rightarrow$ Decode $\rightarrow$ Execute $\rightarrow$ Memory $\rightarrow$ Write-back}.  
+Not every instruction uses every step, but conceptually the order is always the same.
+
+\textbf{1. Fetch (get the instruction)}
+
+In this stage, the CPU fetches the next instruction from instruction memory and places it into the \textbf{Instruction Register (IR)}. The control unit enables a memory read and updates the Program Counter (PC), for example:
+\[
+PC = PC + 4
+\]
+(assuming fixed-length instructions).
+
+Think of this step as: \emph{“Bring me the next command.”}
+
+\textbf{2. Decode (understand the instruction)}
+
+During decode, the instruction is analyzed. The datapath extracts the instruction fields such as the opcode, register numbers, and immediate values. At the same time, the register file is accessed to read the source registers.
+
+The control unit decodes the opcode and decides:
+\begin{itemize}
+    \item Which ALU operation is needed
+    \item Whether memory will be accessed
+    \item Whether a register will be written
+\end{itemize}
+
+Think of this step as: \emph{“What does this instruction want me to do?”}
+
+\textbf{3. Execute (do the operation)}
+
+This is where the main computation happens. The datapath performs arithmetic or logical operations using the ALU, computes addresses, or evaluates comparisons for branches.
+
+The control unit selects the ALU operation and chooses the correct ALU inputs using multiplexers (MUXes).
+
+Think of this step as: \emph{“Do the actual work.”}
+
+\textbf{4. Memory access (if needed)}
+
+If the instruction is a load or store, memory is accessed during this stage. Loads read data from memory, and stores write data to memory. Instructions that do not use memory simply skip this step.
+
+\textbf{5. Write-back}
+
+Finally, if the instruction produces a result, it is written back into the destination register in the register file.
+
+\medskip
+
+The instruction execution cycle is a repeated process where the control unit guides the datapath through the stages of fetch, decode, execute, memory access, and write-back, over and over again for every instruction.
+
+\subsection{Pipelining}
+
+Pipelining allows a CPU to work on multiple instructions at the same time by breaking instruction execution into stages, much like an assembly line.
+
+Imagine a car wash with four stations: wash, rinse, dry, and inspect. Every car must go through all four steps. However, while Car A is being rinsed, Car B can be washed, and Car C can be inspected. Once the pipeline is full, one car finishes at every step, even though each individual car still takes time to pass through all stations. This is a simple way to understand pipelining.
+
+Now, how does this idea map to a CPU?
+
+A CPU instruction is split into the same five stages discussed earlier: \textbf{fetch, decode, execute, memory, and write-back}. Instead of completing all five stages for one instruction before starting the next, the CPU overlaps these stages across multiple instructions.
+
+\textbf{Without pipelining:}
+\begin{verbatim}
+Instruction 1: IF → ID → EX → MEM → WB
+Instruction 2:                      IF → ID → EX → MEM → WB
+\end{verbatim}
+Only one instruction is active at a time.
+
+\textbf{With pipelining:}
+\begin{verbatim}
+Cycle 1: Inst1 IF
+Cycle 2: Inst1 ID | Inst2 IF
+Cycle 3: Inst1 EX | Inst2 ID | Inst3 IF
+Cycle 4: Inst1 MEM| Inst2 EX | Inst3 ID | Inst4 IF
+Cycle 5: Inst1 WB | Inst2 MEM| Inst3 EX | Inst4 ID | Inst5 IF
+\end{verbatim}
+
+After the pipeline fills, one instruction completes every cycle. This increases \textbf{throughput}, meaning more work is done per unit of time, even though the latency of a single instruction stays the same.
+
+\medskip
+
+\textbf{Problems pipelining must handle (briefly)}
+
+\begin{enumerate}
+    \item \textbf{Data hazards}  
+    An instruction needs a result that is not ready yet.
+    
+    \item \textbf{Control hazards}  
+    Branches and jumps change which instruction comes next.
+    
+    \item \textbf{Structural hazards}  
+    Two stages need the same hardware resource at the same time.
+\end{enumerate}
+
+Modern CPUs handle these problems using techniques such as forwarding, stalling, and branch prediction.
+
+\medskip
+
+\textbf{One-line summary}
+
+Pipelining is an assembly-line approach to instruction execution that improves CPU performance by overlapping the stages of multiple instructions.
+
+\subsubsection{Pipeline Stages}
+
+Most textbooks describe pipelining using a classic \textbf{5-stage RISC pipeline model}. Each instruction is broken into stages, and pipelining overlaps these stages across multiple instructions.
+
+\textbf{1. Instruction Fetch (IF)}
+\begin{itemize}
+    \item The CPU reads the instruction from instruction memory
+    \item The Program Counter (PC) is updated to point to the next instruction
+\end{itemize}
+
+\textbf{2. Instruction Decode (ID)}
+\begin{itemize}
+    \item The instruction is decoded (what operation to perform)
+    \item Source registers are read from the register file
+    \item Control signals are generated
+\end{itemize}
+
+\textbf{3. Execute (EX)}
+\begin{itemize}
+    \item The ALU performs arithmetic or logical operations
+    \item Branch conditions are evaluated
+    \item Effective memory addresses are calculated
+\end{itemize}
+
+\textbf{4. Memory Access (MEM)}
+\begin{itemize}
+    \item Data memory is read or written for load and store instructions
+    \item Other instructions simply pass through this stage
+\end{itemize}
+
+\textbf{5. Write Back (WB)}
+\begin{itemize}
+    \item The result of the instruction is written back to the register file
+\end{itemize}
+
+\medskip
+
+\textbf{Key point:}  
+Each stage performs part of the work, and pipelining overlaps these stages across different instructions to increase throughput.
+
+\subsubsection*{Pipeline Hazards}
+
+A \textbf{pipeline hazard} is anything that prevents the next instruction from executing in the following clock cycle. There are three main types of hazards.
+
+\paragraph{A. Structural Hazards (hardware conflicts)}
+
+\textbf{What happens?}  
+Two pipeline stages need the same hardware resource at the same time.
+
+\textbf{Example:}  
+Instruction fetch and data memory access both need the same memory unit.
+
+\textbf{Result:}  
+One instruction must stall.
+
+\paragraph{B. Data Hazards (instruction dependencies)}
+
+\textbf{What happens?}  
+An instruction depends on the result of a previous instruction that has not finished yet.
+
+\textbf{Example:}
+\begin{verbatim}
+ADD R1, R2, R3   ; R1 = R2 + R3
+SUB R4, R1, R5   ; uses R1 immediately
+\end{verbatim}
+
+\textbf{Types of data hazards:}
+\begin{itemize}
+    \item \textbf{RAW (Read After Write)} — most common and most important
+    \item \textbf{WAR (Write After Read)}
+    \item \textbf{WAW (Write After Write)}
+\end{itemize}
+
+In simple in-order pipelines, RAW hazards dominate.
+
+\paragraph{C. Control Hazards (branches)}
+
+\textbf{What happens?}  
+The CPU does not know which instruction comes next because of a branch.
+
+\textbf{Example:}
+\begin{verbatim}
+BEQ R1, R2, LABEL
+\end{verbatim}
+
+The pipeline may fetch the wrong instruction before the branch outcome is known.
+
+\subsubsection*{Hazard Mitigation Techniques}
+
+Modern CPUs use several techniques to reduce or eliminate pipeline stalls.
+
+\paragraph{A. Structural hazard solutions}
+
+\begin{itemize}
+    \item \textbf{Resource duplication:} separate instruction and data memory, or multiple functional units
+\end{itemize}
+
+This approach is used in Harvard-style architectures.
+
+\paragraph{B. Data hazard solutions}
+
+\textbf{1. Pipeline stalling (bubble insertion)}
+\begin{itemize}
+    \item Pause the pipeline until the data is ready
+    \item Simple, but reduces performance
+\end{itemize}
+
+\textbf{2. Forwarding (bypassing)}
+\begin{itemize}
+    \item Send results directly from one pipeline stage to another
+    \item Avoid waiting for write-back
+    \item Most common solution
+\end{itemize}
+
+\textbf{3. Register renaming}
+\begin{itemize}
+    \item Eliminates WAR and WAW hazards
+    \item Used in out-of-order execution
+\end{itemize}
+
+\paragraph{C. Control hazard solutions}
+
+\textbf{1. Pipeline flush}
+\begin{itemize}
+    \item Discard incorrectly fetched instructions
+    \item Simple, but costly
+\end{itemize}
+
+\textbf{2. Branch prediction}
+\begin{itemize}
+    \item Guess whether a branch will be taken or not
+    \item Continue execution speculatively
+    \item Can be static or dynamic (history-based)
+\end{itemize}
+
+\textbf{3. Delayed branch}
+\begin{itemize}
+    \item Always execute the instruction after the branch
+    \item Compiler schedules useful work
+\end{itemize}
+
+Used in early RISC designs.
+
+\medskip
+
+\textbf{Quick summary}
+
+\begin{center}
+\begin{tabular}{l|l|l}
+\textbf{Hazard} & \textbf{Problem} & \textbf{Solution} \\
+\hline
+Structural & Hardware conflict & Duplicate resources \\
+Data & Instruction dependency & Forwarding, stalls \\
+Control & Unknown next instruction & Prediction, flush \\
+\end{tabular}
+\end{center}
+
+\medskip
+
+\textbf{One-sentence takeaway}
+
+Pipeline stages divide instruction work, hazards disrupt smooth flow, and mitigation techniques keep the pipeline full and efficient.
+
+\subsection{Superscalar and Out-of-Order Execution}
+
+Modern processors try to execute more than one instruction at the same time to improve performance.
+This idea is known as \textbf{superscalar execution}.
+A superscalar processor has multiple execution units, so it can issue and execute several instructions during the same clock cycle instead of just one.
+
+However, instructions in a program are written in a specific order, and sometimes one instruction must wait for the result of another.
+To reduce waiting time, processors use \textbf{out-of-order execution}.
+This means the processor can execute instructions in a different order than they appear in the program, as long as the final result is the same.
+By doing this, the processor keeps its execution units busy and avoids unnecessary delays.
+
+\subsection{Branch Prediction}
+
+A branch instruction occurs when the program must choose between different paths, such as in \texttt{if} statements or loops.
+When the processor reaches a branch, it does not immediately know which path will be taken.
+If it waits for the decision, performance decreases.
+
+To solve this problem, processors use \textbf{branch prediction}.
+Branch prediction is a technique where the processor guesses which path will be taken and continues executing instructions along that path.
+If the guess is correct, execution continues smoothly.
+If the guess is wrong, the processor must discard the incorrect instructions and restart, which causes a small performance penalty.
+Accurate branch prediction is very important for maintaining high performance.
+
+\subsection{Instruction-Level Parallelism}
+
+\textbf{Instruction-Level Parallelism (ILP)} refers to the ability of a processor to execute multiple instructions at the same time.
+Many instructions in a program are independent, meaning they do not rely on the results of others.
+These independent instructions can be executed in parallel.
+
+Techniques such as superscalar execution, out-of-order execution, and branch prediction are all used to increase instruction-level parallelism.
+The more ILP a processor can exploit, the more work it can do in less time, leading to faster program execution.
+
+% -------------------------------------------------
+
+\section{Machine Language and Binary Code}
+\subsection{Machine Instructions and Opcodes}
+Finally the introduction into assembly language, but before get to much into it, we need to talk about machine instructions, Opcodes and basics concepts. Talkign about opcode, Opcodes are the core building blocks of assembly, They are the fundamental instructions that computer's CPU can execute, alread we have been seeing opcodes before in differents sections, but this time is essential to understant a bit more about opcodes and his differents functions and definitions.
+
+\subsection{Binary Encoding of Instructions}
+\subsection{Instruction Decoding and Execution}
+\subsection{Endianness and Data Alignment}
+\subsection{Executable Binary Formats}
+
+% -------------------------------------------------
+
+\section{Assembly Language}
+
+\subsection{Assembly Syntax and Instruction Mnemonics}
+\subsection{Registers and Operands}
+\subsection{Labels, Directives, and Macros}
+\subsection{Assemblers and Assembly Process}
+\subsection{Relationship Between Assembly and Machine Code}
+
+% -------------------------------------------------
+
+\section{Memory Architecture}
+
+\subsection{Memory Hierarchy}
+\subsubsection{Registers}
+\subsubsection{Cache Memory}
+\subsubsection{Main Memory}
+\subsubsection{Secondary Storage}
+
+\subsection{Cache Organization}
+\subsubsection{Cache Mapping Techniques}
+\subsubsection{Replacement Policies}
+\subsubsection{Write Policies}
+
+\subsection{Virtual Memory}
+\subsubsection{Paging and Segmentation}
+\subsubsection{Memory Management Units (MMU)}
+\subsubsection{Translation Lookaside Buffers (TLB)}
+
+% -------------------------------------------------
+
+\section{Input/Output and System Architecture}
+
+\subsection{I/O Devices and Controllers}
+\subsection{Memory-Mapped and Port-Mapped I/O}
+\subsection{Interrupts and Exceptions}
+\subsection{Direct Memory Access (DMA)}
+\subsection{System Buses and Interconnect Technologies}
+
+% -------------------------------------------------
+
+\section{Parallelism and Modern Architectures}
+
+\subsection{Multicore Processors}
+\subsection{Simultaneous Multithreading (SMT)}
+\subsection{Vector and SIMD Architectures}
+\subsection{Graphics Processing Units (GPUs)}
+\subsection{Heterogeneous Computing Systems}
+
+% -------------------------------------------------
+
+\section{Performance Evaluation and Optimization}
+
+\subsection{Performance Metrics}
+\subsubsection{Latency and Throughput}
+\subsubsection{Cycles Per Instruction (CPI)}
+
+\subsection{Performance Models}
+\subsubsection{Amdahl’s Law}
+\subsubsection{Scalability Limits}
+
+\subsection{Power and Energy Efficiency}
+\subsection{Thermal Constraints}
+
+% -------------------------------------------------
+
+\section{Security and Reliability in Computer Architecture}
+
+\subsection{Hardware Security Vulnerabilities}
+\subsubsection{Side-Channel Attacks}
+\subsubsection{Speculative Execution Attacks}
+
+\subsection{Secure Hardware Mechanisms}
+\subsection{Fault Tolerance and Error Detection}
+\subsection{Error-Correcting Codes (ECC)}
+
+% -------------------------------------------------
+
+\section{Conclusion}
+
+\subsection{Summary of Architectural Concepts}
+\subsection{Trends in Future Computer Architectures}
+
+
+\end{document}
