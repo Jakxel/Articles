@@ -54,9 +54,6 @@ build/
 *.fdb_latexmk
 *.synctex.gz
 
-# PDFs (generated output)
-*.pdf
-
 # Minted
 _minted*
 *.pyg
